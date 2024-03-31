@@ -5,3 +5,9 @@ export const GetProjects = async () => {
   const data = await response.json();
   return data;
 }
+
+export const GetUserById = async (id) => {
+  const response = await fetch(`${API_URL}/user/${id}`);
+  const data = await response.json();
+  return data;
+}
