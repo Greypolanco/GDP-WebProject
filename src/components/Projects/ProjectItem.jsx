@@ -1,30 +1,41 @@
-import React from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './ProjectItem.css';
 
-export const ProjectItem = ({ project }) => {
+export const ProjectItem = ({ project, onSelect }) => {
   const navigate = useNavigate();
 
+  function getStatusColor(status) {
+    switch (status) {
+      case 1:
+        return 'circle-progress';
+      case 2:
+        return 'circle-pending';
+      case 3:
+        return 'circle-completed';
+      case 4:
+        return 'circle-stopped';
+      default:
+        return 'circle-default';
+    }
+  }
+
+  const handleClick = () => {
+    onSelect(project);
+  }
+
   return (
-    <div key={project.id} className='col-md-4 mb-4'>
-      <div className='card'>
-        <div className='card-header card-title'>
-          <h5>{project.id}- {project.title}</h5>
-        </div>
-        <div className='card-body'>
-          <p className='card-text'>{project.description}</p>
-          <p className='card-text'><strong>{project.status}</strong></p>
-          <p className='card-text'>{project.startDate} - {project.endDate}</p>
-          <p className='card-text'>Note: {project.note ==='' ? '' : project.note}</p>
-          <p className='card-text'>Participants:[ {project.participants.map(participant =>(
-            <span key={participant.id}>{participant.id}  </span>
-          ))}]</p>
-        </div>
-        <div className='card-footer d-flex justify-content-center'>
-          <button className='btn btn-primary bi-eye' onClick={() => navigate(`/projects/update-project/${project.id}`)}>Ver</button>
+    <div className='project-item' onClick={handleClick}>
+      <div className='id'>{project.id}</div>
+      <div className='content'>
+        <div className='title'>{project.title}</div>
+        <div className='details'>
+          <div className='date'>{project.startDate}</div>
+          <div className={`status ${getStatusColor(project.status)}`}></div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProjectItem
+export default ProjectItem;
