@@ -16,10 +16,10 @@ export const ProjectsIndex = () => {
       </header>
       <section className='card-body'>
         <div className='row'>
-          <div className='col-md-4'>
+          <div className='col-md-3'>
             <ProjectsList onProjectSelect={handleProjectSelect} />
           </div>
-          <div className='col-md-6'>
+          <div className='col'>
             <ProjectDetail project={selectedProject}/>
           </div>
         </div>
