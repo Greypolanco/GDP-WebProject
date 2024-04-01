@@ -1,0 +1,26 @@
+.status {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid;
+}
+
+.circle-progress {
+  background-color: rgb(206, 134, 0);
+}
+
+.circle-completed {
+  background-color: green;
+}
+
+.circle-pending {
+  background-color: yellow;
+}
+
+.circle-stopped {
+  background-color: red;
+}
+
+.circle-default {
+  background-color: gray;
+}
