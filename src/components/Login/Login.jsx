@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import * as AuthService from '../../services/AuthService';
 import { useAuth } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,14 @@ export const Login = () => {
   const [error, setError] = useState('');
   const { setUser } = useAuth();
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      navigate('/projects');
+    }
+  }, [setUser, navigate]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
@@ -18,7 +26,7 @@ export const Login = () => {
     try {
       const userLogged = await AuthService.login(credentials);
       setUser(userLogged);
-      console.log(userLogged);
+      localStorage.setItem('user', JSON.stringify(userLogged));
       navigate('/projects');
     } catch (error) {
       setError('Credenciales inválidas. Por favor, intenta de nuevo.');
