@@ -1,3 +1,14 @@
+:root{
+  --yw-color-500: #FFB401;
+  --yw-color-400: #FFD41B;
+  --yw-color-950: #481f00;
+  --yw-color-100: #fff8c5;
+  --yw-color-900: #7c3d0b;
+  --wh-color-100: #FFFFFF;
+  --secondary-color: #282c34;
+  --dark-color: #333a46;
+  --light-color: #FFF;
+}
 body{
   background-color: #282c34;
 }
@@ -10,6 +21,10 @@ body{
   border: 1px solid #FFB401;
 }
 .card-header{
-  background-color: #333a46;
-  color: FFB401;
+  background-color: var(--dark-color);
+  color: var(--yw-color-500);
+}
+
+.container h1, h2, h3, h4, h5{
+  color: var(--yw-color-500);
 }
