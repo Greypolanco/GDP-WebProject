@@ -1,7 +1,7 @@
 const API_URL = 'https://localhost:7032/api'
 
-export const GetProjects = async () => {
-  const response = await fetch(`${API_URL}/project`);
+export const GetProjects = async (userId) => {
+  const response = await fetch(`${API_URL}/project?userId=${userId}`);
   const data = await response.json();
   return data;
 }

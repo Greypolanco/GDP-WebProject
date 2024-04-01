@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import ProjectItem from './ProjectItem'
-import * as ProjectService from '../../services/ProjectService'
+import React, { useState, useEffect } from 'react';
+import ProjectItem from './ProjectItem';
+import * as ProjectService from '../../services/ProjectService';
+import { useAuth } from '../../context/AppContext';
 
 export const ProjectsList = ({ onProjectSelect }) => {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const userLogged = useAuth();
 
   const listProjects = async () => {
     try {
-      const response = await ProjectService.getProjects();
+      const response = await ProjectService.getProjects(userLogged.user.id);
       setProjects(response);
+      setLoading(false);
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
-  }
-
+  };
+  
   const handleProjectSelect = (selectedProject) => {
     onProjectSelect(selectedProject);
   };
@@ -24,11 +29,17 @@ export const ProjectsList = ({ onProjectSelect }) => {
 
   return (
     <div>
-      {projects.map((project) => (
-        <ProjectItem key={project.id} project={project} onSelect={handleProjectSelect} />
-      ))}
+      {loading ? (
+        <p>Cargando proyectos...</p>
+      ) : projects.length === 0 ? (
+        <p>No se encontraron proyectos para este usuario {':('}</p>
+      ) : (
+        projects.map((project) => (
+          <ProjectItem key={project.id} project={project} onSelect={handleProjectSelect} />
+        ))
+      )}
     </div>
   );
-}
+};
 
-export default ProjectsList
+export default ProjectsList;
