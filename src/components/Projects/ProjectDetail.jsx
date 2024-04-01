@@ -7,6 +7,7 @@ import { useAuth } from '../../context/AppContext';
 const ProjectDetail = ({ project }) => {
   const [users, setUsers] = useState([]);
   const userLogged = useAuth();
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,17 +22,22 @@ const ProjectDetail = ({ project }) => {
     if (project) {
       fetchUsers();
     }
+
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setLoggedInUser(JSON.parse(storedUser));
+    }
   }, [project]);
 
   if (!project) {
-    const newLocal = 'text';
     return (
       <>
-        {console.log(userLogged)}
-        <h1>¡Bienvenido, <strong>@{userLogged.user.username}</strong>!</h1>
+        {loggedInUser && (
+          <h1>¡Bienvenido, <strong>@{loggedInUser.username}</strong>!</h1>
+        )}
         <h4>Pulsa sobre uno de los proyectos de la izquierda para ver sus detalles.</h4>
       </>
-    )
+    );
   }
 
   return (
