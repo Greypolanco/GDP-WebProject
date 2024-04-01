@@ -11,3 +11,14 @@ export const GetUserById = async (id) => {
   const data = await response.json();
   return data;
 }
+
+//Login
+export const Login = async (credential) => {
+  const response = await fetch(`${API_URL}/Auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credential)
+  });
+  const data = await response.json();
+  return data;
+}
