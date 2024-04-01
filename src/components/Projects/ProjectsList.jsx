@@ -11,13 +11,18 @@ export const ProjectsList = ({ onProjectSelect }) => {
   const listProjects = async () => {
     try {
       const response = await ProjectService.getProjects(userLogged.user.id);
-      setProjects(response);
+      if (Array.isArray(response)) { // Check if response is an array
+        setProjects(response);
+      } else {
+        // Handle non-array response (e.g., log an error or set an empty array)
+      }
       setLoading(false);
     } catch (e) {
       console.log(e);
       setLoading(false);
     }
   };
+  
   
   const handleProjectSelect = (selectedProject) => {
     onProjectSelect(selectedProject);
