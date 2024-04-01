@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as UserService from '../../services/UserService';
+import { getStatusColor, formatDate } from '../../utils/utils';
+import '../../utils/utils.css';
 
 const ProjectDetail = ({ project }) => {
   const [users, setUsers] = useState([]);
@@ -19,15 +21,15 @@ const ProjectDetail = ({ project }) => {
     }
   }, [project]);
 
-  const getUserById = async (userId) => {
-    try {
-      const user = await UserService.getUserById(userId);
-      return user;
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      return null;
-    }
-  };
+  if (!project) {
+    const newLocal = 'text';
+    return (
+      <>
+        <h1>¡Bienvenido, <strong>[Username]</strong>!</h1>
+        <h4>Pulsa sobre uno de los proyectos de la izquierda para ver sus detalles.</h4>
+      </>
+    )
+  }
 
   return (
     <div className='container'>
@@ -38,9 +40,9 @@ const ProjectDetail = ({ project }) => {
           </header>
           <section>
             <p>{project.description}</p>
-            <p>{project.startDate} - {project.endDate}</p>
-            <h5 className='mb-3'>Participantes</h5>
-            <table className='table table-dark table-responsive'>
+            <p>{formatDate(project.startDate)} - {formatDate(project.endDate)}</p>
+            <h5>Participantes</h5>
+            <table className='table table-dark table-responsive text-center'>
               <thead>
                 <tr>
                   <th>Usuario</th>
@@ -62,11 +64,30 @@ const ProjectDetail = ({ project }) => {
             </table>
 
             <h5>Tareas</h5>
-            <ul>
-              {project.tasks.map(task =>
-                <li key={task.id}>[{task.id}] {task.title}</li>
-              )}
-            </ul>
+            <table className='table table-dark table-responsive text-center'>
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                  <th>Estado</th>
+                  <th>Participante</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {project.tasks.map(task =>
+                  <tr key={task.id}>
+                    <td>{task.title}</td>
+                    <td>{formatDate(task.startDate)}</td>
+                    <td>{formatDate(task.endDate)}</td>
+                    <td><div className={`status ${getStatusColor(task.status)}`}></div></td>
+                    <td>{task.userId}</td>
+                    <td>Ver</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </section>
         </div>
       )}

@@ -1,24 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './ProjectItem.css';
+import { getStatusColor, formatDate } from '../../utils/utils';
+import '../../utils/utils.css';
 
 export const ProjectItem = ({ project, onSelect }) => {
-  const navigate = useNavigate();
-
-  function getStatusColor(status) {
-    switch (status) {
-      case 1:
-        return 'circle-progress';
-      case 2:
-        return 'circle-pending';
-      case 3:
-        return 'circle-completed';
-      case 4:
-        return 'circle-stopped';
-      default:
-        return 'circle-default';
-    }
-  }
 
   const handleClick = () => {
     onSelect(project);
@@ -30,7 +15,7 @@ export const ProjectItem = ({ project, onSelect }) => {
       <div className='content'>
         <div className='title'>{project.title}</div>
         <div className='details'>
-          <div className='date'>{project.startDate}</div>
+          <div className='date'>{formatDate(project.startDate)}</div>
           <div className={`status ${getStatusColor(project.status)}`}></div>
         </div>
       </div>
