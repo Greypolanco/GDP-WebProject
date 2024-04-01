@@ -1,20 +1,23 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { AuthProvider } from './context/AppContext.jsx'
 //Componentes
-import { Navbar, ProjectsIndex } from "./components/index.jsx";
+import { Navbar, ProjectsIndex, Login } from "./components/index.jsx";
 
 function App() {
   return (
-    <BrowserRouter>
-      {/* Navbar */}
-      <Navbar />
-      <div className="container card my-4 p-3">
-        <Routes>
-          <Route exact path="/" element={<ProjectsIndex/>} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <div className="container card my-4 p-3">
+          <Routes>
+            <Route exact path="/projects" element={<ProjectsIndex />} />
+            <Route exact path="/" element={<Login />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

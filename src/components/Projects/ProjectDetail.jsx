@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import * as UserService from '../../services/UserService';
 import { getStatusColor, formatDate } from '../../utils/utils';
 import '../../utils/utils.css';
+import { useAuth } from '../../context/AppContext';
 
 const ProjectDetail = ({ project }) => {
   const [users, setUsers] = useState([]);
+  const userLogged = useAuth();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -25,7 +27,8 @@ const ProjectDetail = ({ project }) => {
     const newLocal = 'text';
     return (
       <>
-        <h1>¡Bienvenido, <strong>[Username]</strong>!</h1>
+        {console.log(userLogged)}
+        <h1>¡Bienvenido, <strong>@{userLogged.user.username}</strong>!</h1>
         <h4>Pulsa sobre uno de los proyectos de la izquierda para ver sus detalles.</h4>
       </>
     )
