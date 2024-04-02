@@ -5,7 +5,7 @@ export const LoginButton = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/');
+    navigate('/login');
   }
 
   return <button className='btn btn-outline-warning' onClick={handleClick}>Login</button>
