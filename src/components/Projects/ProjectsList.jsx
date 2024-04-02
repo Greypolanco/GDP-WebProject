@@ -6,15 +6,15 @@ import { useAuth } from '../../context/AppContext';
 export const ProjectsList = ({ onProjectSelect }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userLogged = useAuth();
+  const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   const listProjects = async () => {
     try {
-      const response = await ProjectService.getProjects(userLogged.user.id);
-      if (Array.isArray(response)) { // Check if response is an array
+      const response = await ProjectService.getProjects(userLogged.id);
+      if (Array.isArray(response)) {
         setProjects(response);
       } else {
-        // Handle non-array response (e.g., log an error or set an empty array)
+        
       }
       setLoading(false);
     } catch (e) {
