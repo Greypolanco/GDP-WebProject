@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Collapse } from "react-bootstrap";
 import { useAuth } from "../../context/AppContext";
@@ -7,7 +7,14 @@ import LoginButton from "../Login/LoginButton";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
+  useEffect(() => {
+    if (userLogged) {
+      setUser(userLogged);
+    }
+  },[]);
 
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
