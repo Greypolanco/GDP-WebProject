@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import * as UserService from '../../services/UserService';
 import { getStatusColor, formatDate } from '../../utils/utils';
 import '../../utils/utils.css';
-import { useAuth } from '../../context/AppContext';
 
 const ProjectDetail = ({ project }) => {
   const [users, setUsers] = useState([]);
-  const userLogged = useAuth();
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,27 +20,22 @@ const ProjectDetail = ({ project }) => {
     if (project) {
       fetchUsers();
     }
-
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setLoggedInUser(JSON.parse(storedUser));
-    }
-  }, [project]);
+  });
 
   if (!project) {
     return (
       <>
-        {loggedInUser && (
-          <h1>¡Bienvenido, <strong>@{loggedInUser.username}</strong>!</h1>
-        )}
-        <h4>Pulsa sobre uno de los proyectos de la izquierda para ver sus detalles.</h4>
+        {userLogged ?
+          <h2>Bienvenido, {userLogged.username}!</h2> : 
+          <h2>Hola, debes iniciar sesión para ver tus proyectos</h2>}
+        {userLogged && <h5>Seleccione un proyecto para ver los detalles</h5>}
       </>
     );
   }
 
   return (
     <div className='container'>
-      {project && (
+      {project &&(
         <div>
           <header>
             <h2>{project.title}</h2>

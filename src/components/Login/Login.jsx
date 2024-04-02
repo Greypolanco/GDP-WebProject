@@ -1,21 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import * as AuthService from '../../services/AuthService';
-import { useAuth } from '../../context/AppContext';
+import { useAuth, AuthProvider } from '../../context/AppContext'; // Import both
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const { setUser } = useAuth();
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      navigate('/projects');
-    }
-  }, [setUser, navigate]);
+  const { user, setUser } = useAuth(); // Use destructuring to access context values
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,8 +18,8 @@ export const Login = () => {
     try {
       const userLogged = await AuthService.login(credentials);
       setUser(userLogged);
-      localStorage.setItem('user', JSON.stringify(userLogged));
       navigate('/projects');
+      localStorage.setItem('user', JSON.stringify(userLogged)); // Save user in local storage
     } catch (error) {
       setError('Credenciales inválidas. Por favor, intenta de nuevo.');
     }
