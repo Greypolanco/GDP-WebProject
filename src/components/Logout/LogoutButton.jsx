@@ -1,15 +1,18 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AppContext';
 
 export const Logout = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const handleLogout = () => {
+    setUser(null);
     localStorage.removeItem('user');
     navigate('/');
   }
 
   return (
-    <button className='btn btn-outline-warning' onClick={handleLogout}>Logout</button>
+    <button className='btn btn-outline-danger' onClick={handleLogout}>Logout</button>
   )
 }
 
