@@ -8,7 +8,7 @@ export const Logout = () => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    navigate('/');
+    navigate('/login');
   }
 
   return (

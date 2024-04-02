@@ -13,7 +13,7 @@ function App() {
         <div className="container card my-4 p-3">
           <Routes>
             <Route exact path="/projects" element={<ProjectsIndex />} />
-            <Route exact path="/" element={<Login />} />
+            <Route exact path="/login" element={<Login />} />
           </Routes>
         </div>
       </BrowserRouter>
