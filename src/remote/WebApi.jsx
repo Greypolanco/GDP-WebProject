@@ -1,5 +1,4 @@
-//const API_URL = 'http://localhost:5131/api'
-const API_URL = 'http://gdpwebapi.somee.com/api'
+const API_URL = 'http://localhost:5131/api'
 
 export const GetProjects = async (userId) => {
   const response = await fetch(`${API_URL}/project/userprojects/${userId}`);
