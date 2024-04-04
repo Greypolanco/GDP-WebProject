@@ -53,12 +53,11 @@ export const ProjectsList = ({ onProjectSelect }) => {
             </div>
           </div>
           <div className='card-body'>
-            <table className='table table-hover text-center'>
+            <table className='table table-hover text-center align-middle'>
               <thead>
                 <tr>
                   <th>Id</th>
                   <th>Titulo</th>
-                  <th>Descripción</th>
                   <th>Fecha de creación</th>
                   <th>Estado</th>
                   <th>Acciones</th>
@@ -69,20 +68,17 @@ export const ProjectsList = ({ onProjectSelect }) => {
                   <tr key={project.id}>
                     <td>{project.id}</td>
                     <td>{project.title}</td>
-                    <td>{project.description}</td>
                     <td>{formatDate(project.startDate)}</td>
                     <td><div className={getStatusColor(project.status)}></div></td>
                     <td>
                       <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(project.id)}></button>
-                      <button className='btn btn-outline-primary bi bi-pencil m-1'></button>
-                      <button className='btn btn-outline-danger bi bi-trash m-1'></button>
+                      <button className='btn btn-outline-primary bi bi-pencil m-1' disabled></button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-
         </div>
       )}
     </div>
