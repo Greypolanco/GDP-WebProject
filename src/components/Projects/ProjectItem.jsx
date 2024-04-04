@@ -22,11 +22,11 @@ export const ProjectItem = ({ project, onSelect }) => {
         <h2>{project.title}</h2>
         <p><strong>Descripción:</strong> {project.description}</p>
         <p><strong>Fecha de inicio:</strong> {formatDate(project.startDate)}</p>
-        <p className='d-flex'>
+        <div className='d-flex'>
           <strong>Estado:</strong>
           <div className={`ms-1 mt-1 me-1 ${getStatusColor(project.status)}`}>
           </div>{getStatusText(project.status)}
-        </p>
+        </div>
       </section>
     </div>
   );
