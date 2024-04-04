@@ -4,7 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./App.css";
 import { AuthProvider } from './context/AppContext.jsx'
 //Componentes
-import { Navbar, ProjectsIndex, Login } from "./components/index.jsx";
+import { Navbar, ProjectsIndex, Login, ProjectConsult, ProjectView } from "./components/index.jsx";
 
 function App() {
   return (
@@ -13,8 +13,12 @@ function App() {
         <Navbar />
         <div className="container my-4 p-3">
           <Routes>
-            <Route exact path="/projects" element={<ProjectsIndex />} />
             <Route exact path="/login" element={<Login />} />
+
+            {/* Project routes */}
+            <Route exact path="/projects" element={<ProjectsIndex />} />
+            <Route exact path="/projects/:id" element={<ProjectView />} />
+            <Route path="/projects/consult" element={<ProjectConsult/>}/>
           </Routes>
         </div>
       </BrowserRouter>
