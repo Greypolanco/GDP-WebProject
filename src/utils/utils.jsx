@@ -1,3 +1,15 @@
+import { getUserById }  from '../services/UserService';
+
+export const getUserByIdAsync = async (id) => {
+  try{
+    const res = await getUserById(id);
+    const data = res.json();
+    return data;
+  }catch(e){
+    console.log(e);
+  }
+}
+
 export function getStatusColor(status) {
   switch (status) {
     case 1:
@@ -10,6 +22,21 @@ export function getStatusColor(status) {
       return 'status circle-stopped';
     default:
       return 'status circle-default';
+  }
+}
+
+export function getStatusText(status) {
+  switch (status) {
+    case 1:
+      return 'En progreso';
+    case 2:
+      return 'Pendiente';
+    case 3:
+      return 'Completado';
+    case 4:
+      return 'Detenido';
+    default:
+      return 'Desconocido';
   }
 }
 
