@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import ProjectItem from './ProjectItem';
 import * as ProjectService from '../../services/ProjectService';
-import * as UserService from '../../services/UserService';
-import { useAuth } from '../../context/AppContext';
-import { getStatusColor, formatDate, getUserByIdAsync } from '../../utils/utils';
+import { getStatusColor, formatDate } from '../../utils/utils';
 import '../../utils/utils.css';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const ProjectsList = ({ onProjectSelect }) => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
@@ -30,6 +29,9 @@ export const ProjectsList = ({ onProjectSelect }) => {
   const handleProjectSelect = (selectedProject) => {
     onProjectSelect(selectedProject);
   };
+  const handleView = (projectId) => {
+    navigate(`/projects/${projectId}`)
+  }
 
   useEffect(() => {
     listProjects();
@@ -71,9 +73,9 @@ export const ProjectsList = ({ onProjectSelect }) => {
                     <td>{formatDate(project.startDate)}</td>
                     <td><div className={getStatusColor(project.status)}></div></td>
                     <td>
-                      <Link className='btn btn-outline-warning bi bi-eye m-1'></Link>
-                      <Link className='btn btn-outline-primary bi bi-pencil m-1'></Link>
-                      <Link className='btn btn-outline-danger bi bi-trash m-1'></Link>
+                      <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(project.id)}></button>
+                      <button className='btn btn-outline-primary bi bi-pencil m-1'></button>
+                      <button className='btn btn-outline-danger bi bi-trash m-1'></button>
                     </td>
                   </tr>
                 ))}
