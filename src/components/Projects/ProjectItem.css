@@ -1,0 +1,28 @@
+.item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  transition: all 0.3s ease-in-out;
+}
+@media (max-width: 768px) {
+  .item-container {
+    flex-direction: column;
+  }
+} 
+.item-container:hover {
+  background-color: var(--or-color-100);
+  color: var(--or-color-900);
+  cursor: pointer;
+}
+
+.img-container {
+  flex: 0 0 200px;
+  margin-right: 10px;
+}
+
+.info-container {
+  flex: 1;
+  padding: 8px;
+}
