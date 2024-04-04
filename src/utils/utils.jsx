@@ -1,15 +1,15 @@
 export function getStatusColor(status) {
   switch (status) {
     case 1:
-      return 'circle-progress';
+      return 'status circle-progress';
     case 2:
-      return 'circle-pending';
+      return 'status circle-pending';
     case 3:
-      return 'circle-completed';
+      return 'status circle-completed';
     case 4:
-      return 'circle-stopped';
+      return 'status circle-stopped';
     default:
-      return 'circle-default';
+      return 'status circle-default';
   }
 }
 

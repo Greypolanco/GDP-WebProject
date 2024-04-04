@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./App.css";
 import { AuthProvider } from './context/AppContext.jsx'
 //Componentes
@@ -10,7 +11,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Navbar />
-        <div className="container card my-4 p-3">
+        <div className="container my-4 p-3">
           <Routes>
             <Route exact path="/projects" element={<ProjectsIndex />} />
             <Route exact path="/login" element={<Login />} />

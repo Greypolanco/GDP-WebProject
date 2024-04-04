@@ -8,7 +8,7 @@ export const LoginButton = () => {
     navigate('/login');
   }
 
-  return <button className='btn btn-outline-warning' onClick={handleClick}>Login</button>
+  return <button className='bi bi-box-arrow-in-right btn btn-outline-warning' onClick={handleClick}></button>
 }
 
 export default LoginButton

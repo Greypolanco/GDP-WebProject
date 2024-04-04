@@ -12,7 +12,7 @@ export const Logout = () => {
   }
 
   return (
-    <button className='btn btn-outline-danger' onClick={handleLogout}>Logout</button>
+    <button className='bi bi-box-arrow-right btn btn-outline-danger' onClick={handleLogout}></button>
   )
 }
 

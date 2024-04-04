@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import * as AuthService from '../../services/AuthService';
 import { useAuth, AuthProvider } from '../../context/AppContext'; // Import both
 import { useNavigate } from 'react-router-dom';
-import './login.css';
+
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export const Login = () => {
       </div>
       {error && <div>{error}</div>}
       <div className='d-flex justify-content-center'>
-        <button  className='login-button' onClick={handleLogin}>Iniciar sesión</button>
+        <button  className='primary-button' onClick={handleLogin}>Iniciar sesión</button>
       </div>
     </div>
   );
