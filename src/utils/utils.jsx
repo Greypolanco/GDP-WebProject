@@ -51,3 +51,20 @@ export const formatDate = (dateString) => {
 
   return `${formattedDay}/${formattedMonth}/${year}`;
 };
+
+export const getThumbnail = () => {
+  const option = Math.floor(Math.random() * 4) + 1;
+
+  switch (option) {
+    case 1:
+      return 'https://i.ibb.co/QCx668B/turquese-hand.jpg';
+    case 2:
+      return 'https://i.ibb.co/Rh9mN4v/green-hand.jpg';
+    case 3:
+      return 'https://i.ibb.co/12sdKXJ/red-hand.jpg';
+    case 4:
+      return 'https://i.ibb.co/0rdk28K/purple.jpg';
+    default:
+      return 'https://i.ibb.co/QCx668B/turquese-hand.jpg';
+  }
+}

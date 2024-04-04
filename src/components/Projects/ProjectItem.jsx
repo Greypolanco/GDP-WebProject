@@ -1,21 +1,25 @@
 import React from 'react';
 import './ProjectItem.css';
-import { getStatusColor, formatDate, getStatusText } from '../../utils/utils';
+import { getStatusColor, formatDate, getStatusText, getThumbnail } from '../../utils/utils';
 import '../../utils/utils.css';
+import { useNavigate } from 'react-router-dom';
 
 export const ProjectItem = ({ project, onSelect }) => {
+  const navigate = useNavigate();
+  const thumbnail = getThumbnail();
 
   const handleClick = () => {
-    onSelect(project);
+    navigate(`/projects/${project.id}`)
+    //onSelect(project);
   }
 
   return (
-    <div className='item-container card m-2'>
+    <div className='item-container card m-2' onClick={handleClick}>
       <div className='img-container'>
-        <img src='https://placehold.co/200x200' width={200} height={200} alt={project.title} />
+        <img src={thumbnail} width={200} height={200} alt={project.title} />
       </div>
       <section className='info-container p-2'>
-        <h5>{project.title}</h5>
+        <h2>{project.title}</h2>
         <p><strong>Descripción:</strong> {project.description}</p>
         <p><strong>Fecha de inicio:</strong> {formatDate(project.startDate)}</p>
         <p className='d-flex'>

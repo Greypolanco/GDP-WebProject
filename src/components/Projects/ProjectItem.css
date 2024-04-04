@@ -16,10 +16,15 @@
   color: var(--or-color-900);
   cursor: pointer;
 }
+.item-container:hover .img-container {
+  border: 3px solid var(--or-color-900);
+}
 
 .img-container {
   flex: 0 0 200px;
   margin-right: 10px;
+  border: 1px solid var(--or-color-900);
+  transition: all 0.3s ease-in-out;
 }
 
 .info-container {
