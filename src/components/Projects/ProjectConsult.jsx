@@ -10,6 +10,7 @@ export const ProjectsList = ({ onProjectSelect }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [criterion, setCriterion] = useState('');
+  const [originalProjects, setOriginalProjects] = useState([]);
   const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   const listProjects = async () => {
@@ -17,6 +18,7 @@ export const ProjectsList = ({ onProjectSelect }) => {
       const response = await ProjectService.getProjects(userLogged.id);
       if (Array.isArray(response)) {
         setProjects(response);
+        setOriginalProjects(response);
       }
       setLoading(false);
     } catch (e) {
@@ -30,16 +32,15 @@ export const ProjectsList = ({ onProjectSelect }) => {
   }
 
   const handleSearch = (event) => {
-    setCriterion(event.target.value);
-  }
+    const searchCriterion = event.target.value.toLowerCase();
+    setCriterion(searchCriterion);
+    const filteredList = originalProjects.filter(project => project.title.toLowerCase().includes(searchCriterion));
+    setProjects(filteredList);
+  };
 
   useEffect(() => {
-    const filteredList = projects.filter(project => project.title.includes(criterion));
-    setProjects(filteredList);
-    if (criterion === '') {
-      listProjects();
-    }
-  }, [criterion]);
+    listProjects();
+  }, []);
 
   return (
     <div>
