@@ -11,22 +11,21 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDarkMode = () => {
-    setIsDarkMode(prevMode => !prevMode);
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    localStorage.setItem('darkMode', newMode.toString());
+    document.body.classList.toggle('dark-mode', newMode);
   };
 
   useEffect(() => {
     const localStorageMode = localStorage.getItem('darkMode');
-    if (localStorageMode) {
+    if (localStorageMode !== null) {
       setIsDarkMode(localStorageMode === 'true');
+      document.body.classList.toggle('dark-mode', localStorageMode === 'true');
     } else {
       setIsDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', isDarkMode);
-    document.body.classList.toggle('dark-mode', isDarkMode);
-  }, [isDarkMode]);
 
   return (
     <AuthProvider>

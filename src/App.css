@@ -18,14 +18,17 @@
 
 body {
   font-family: 'Roboto', sans-serif;
+  transition: 0.3s ease-in-out;
 }
 
 .card {
-  border: 0px solid white;
+  border: 1px solid var(--dark-color);
+  transition: 0.3s ease-in-out;
 }
 
 .card-header {
-  border-bottom: 1px solid var(--primary-color);
+  border-bottom: 1px solid var(--dark-color);
+  transition: 0.3s ease-in-out;
 }
 
 .important {
@@ -60,11 +63,12 @@ body {
   --card-bg-color: var(--dark-color);
   --card-header-color: var(--dark-color-light);
   background-color: var(--dark-color);
+  transition: 0.3s ease-in-out;
 }
 
 .dark-mode .card {
   background-color: var(--card-bg-color);
-  border: 0px solid white;
+  border: 1px solid var(--or-color-500);
   color: white;
 }
 
