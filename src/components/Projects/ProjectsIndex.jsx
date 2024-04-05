@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ProjectsList from './ProjectsList'
-import ProjectDetail from './ProjectDetail'
 import { useNavigate } from 'react-router-dom'
 
 export const ProjectsIndex = () => {
@@ -10,7 +9,7 @@ export const ProjectsIndex = () => {
   const handleProjectSelect = (project) => {
     setSelectedProject(project);
   };
-  
+
   useEffect(() => {
     const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
     if (!user) {
@@ -20,18 +19,11 @@ export const ProjectsIndex = () => {
 
   return (
     <div>
-      <header className='mb-3 card-header'>
-        <h3>Tus proyectos</h3>
+      <header>
+        asopdjk
       </header>
-      <section className='card-body'>
-        <div className='row'>
-          <div className='col-md-3'>
-            <ProjectsList onProjectSelect={handleProjectSelect} />
-          </div>
-          <div className='col'>
-            <ProjectDetail project={selectedProject}/>
-          </div>
-        </div>
+      <section>
+        <ProjectsList onProjectSelect={handleProjectSelect} />
       </section>
     </div>
   )

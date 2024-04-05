@@ -1,31 +1,96 @@
-:root{
-  --yw-color-500: #FFB401;
-  --yw-color-400: #FFD41B;
-  --yw-color-950: #481f00;
-  --yw-color-100: #fff8c5;
-  --yw-color-900: #7c3d0b;
-  --wh-color-100: #FFFFFF;
-  --secondary-color: #282c34;
-  --dark-color: #333a46;
-  --light-color: #FFF;
-}
-body{
-  background-color: #282c34;
+:root {
+  --or-color-50: #FEF8EE;
+  --or-color-100: #FCF0D8;
+  --or-color-200: #F8DCB0;
+  --or-color-300: #F4C686;
+  --or-color-400: #ED9F4A;
+  --or-color-500: #E98426;
+  --or-color-600: #DA6A1C;
+  --or-color-700: #B55119;
+  --or-color-800: #90411C;
+  --or-color-900: #74371A;
+  --or-color-950: #3F1A0B;
+
+  --primary-color: var(--or-color-500);
+  --dark-color: #1f1f1f;
+  --dark-color-light: #2b2b2b;
 }
 
-.container{
-  background-color: #282c34;
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.card {
+  border: 0px solid white;
+}
+
+.card-header {
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.important {
+  color: var(--or-color-300);
+}
+
+.important:hover {
+  color: var(--or-color-500);
+}
+
+.primary-button {
+  background-color: white;
+  color: black;
+  border: 1px solid var(--primary-color);
+}
+
+.primary-button:hover {
+  background-color: var(--primary-color);
   color: white;
-  justify-content: center;
-}
-.card{
-  border: 1px solid #FFB401;
-}
-.card-header{
-  background-color: var(--dark-color);
-  color: var(--yw-color-500);
 }
 
-.container h1, h2, h3, h4, h5{
-  color: var(--yw-color-500);
+/* Estilos específicos para el tema claro */
+.light-mode {
+  --text-color: black;
+  --card-bg-color: white;
+  background-color: white;
+}
+
+/* Estilos específicos para el tema oscuro */
+.dark-mode {
+  --text-color: white;
+  --card-bg-color: var(--dark-color);
+  --card-header-color: var(--dark-color-light);
+  background-color: var(--dark-color);
+}
+
+.dark-mode .card {
+  background-color: var(--card-bg-color);
+  border: 0px solid white;
+  color: white;
+}
+
+.dark-mode .card-header {
+  background-color: var(--card-header-color);
+  color: white;
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.dark-mode .table {
+  background-color: #2b2b2b;
+  border: var(--primary-color) 1px solid;
+}
+
+.dark-mode .table th {
+  background-color: #585858;
+  color: white;
+}
+.dark-mode .table td {
+  background-color: #2b2b2b;
+}
+
+.dark-mode .table td, tr{
+  color: white;
+}
+
+.dark-mode .container{
+  color: white;
 }

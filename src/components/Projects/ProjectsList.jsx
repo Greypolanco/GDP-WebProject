@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ProjectItem from './ProjectItem';
 import * as ProjectService from '../../services/ProjectService';
+import * as UserService from '../../services/UserService';
 import { useAuth } from '../../context/AppContext';
+import { getStatusColor, formatDate, getUserByIdAsync } from '../../utils/utils';
+import '../../utils/utils.css';
+import { Link } from 'react-router-dom';
 
 export const ProjectsList = ({ onProjectSelect }) => {
   const [projects, setProjects] = useState([]);
@@ -14,7 +18,7 @@ export const ProjectsList = ({ onProjectSelect }) => {
       if (Array.isArray(response)) {
         setProjects(response);
       } else {
-        
+
       }
       setLoading(false);
     } catch (e) {
@@ -22,8 +26,7 @@ export const ProjectsList = ({ onProjectSelect }) => {
       setLoading(false);
     }
   };
-  
-  
+
   const handleProjectSelect = (selectedProject) => {
     onProjectSelect(selectedProject);
   };
@@ -39,9 +42,18 @@ export const ProjectsList = ({ onProjectSelect }) => {
       ) : projects.length === 0 ? (
         <p>No se encontraron proyectos para este usuario {':('}</p>
       ) : (
-        projects.map((project) => (
-          <ProjectItem key={project.id} project={project} onSelect={handleProjectSelect} />
-        ))
+        <div className='card'>
+          <div className='card-header'>
+            <h3>Tus proyectos</h3>
+          </div>
+          <div className='card-body'>
+            {
+              projects.map((project) => {
+                return <ProjectItem key={project.id} project={project} onSelect={handleProjectSelect} />
+              })
+            }
+          </div>
+        </div>
       )}
     </div>
   );
