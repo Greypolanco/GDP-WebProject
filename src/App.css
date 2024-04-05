@@ -11,7 +11,7 @@
   --or-color-900: #74371A;
   --or-color-950: #3F1A0B;
 
-  --dark-color: #2b2b2b;
+  --dark-color: #1f1f1f;
 
   --primary-color: var(--or-color-500);
   --card-bg-color: var(--dark-color);
@@ -19,7 +19,7 @@
 
 body{
   font-family: 'Roboto', sans-serif;
-  background-color: #2b2b2b;
+  background-color: var(--dark-color);
   color: white;
 }
 .card{
