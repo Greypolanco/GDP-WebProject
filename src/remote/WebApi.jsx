@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5131/api'
+//const API_URL = 'http://gdpwebapi.somee.com/api'
+const API_URL = 'https://localhost:7032/api'
 
 //Projects
 export const GetProjects = async (userId) => {
