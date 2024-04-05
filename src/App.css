@@ -11,60 +11,86 @@
   --or-color-900: #74371A;
   --or-color-950: #3F1A0B;
 
-  --dark-color: #1f1f1f;
-
   --primary-color: var(--or-color-500);
-  --card-bg-color: var(--dark-color);
+  --dark-color: #1f1f1f;
+  --dark-color-light: #2b2b2b;
 }
 
-body{
+body {
   font-family: 'Roboto', sans-serif;
-  background-color: var(--dark-color);
+}
+
+.card {
+  border: 0px solid white;
+}
+
+.card-header {
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.important {
+  color: var(--or-color-300);
+}
+
+.important:hover {
+  color: var(--or-color-500);
+}
+
+.primary-button {
+  background-color: white;
+  color: black;
+  border: 1px solid var(--primary-color);
+}
+
+.primary-button:hover {
+  background-color: var(--primary-color);
   color: white;
 }
-.card{
+
+/* Estilos específicos para el tema claro */
+.light-mode {
+  --text-color: black;
+  --card-bg-color: white;
+  background-color: white;
+}
+
+/* Estilos específicos para el tema oscuro */
+.dark-mode {
+  --text-color: white;
+  --card-bg-color: var(--dark-color);
+  --card-header-color: var(--dark-color-light);
+  background-color: var(--dark-color);
+}
+
+.dark-mode .card {
   background-color: var(--card-bg-color);
   border: 0px solid white;
   color: white;
 }
-.card-header{
-  background-color: var(--dark-color);
+
+.dark-mode .card-header {
+  background-color: var(--card-header-color);
   color: white;
   border-bottom: 1px solid var(--primary-color);
 }
-.table{
+
+.dark-mode .table {
   background-color: #2b2b2b;
   border: var(--primary-color) 1px solid;
 }
-.table th{
+
+.dark-mode .table th {
   background-color: #585858;
   color: white;
 }
-.table td{
+.dark-mode .table td {
   background-color: #2b2b2b;
 }
-.table td, tr{
+
+.dark-mode .table td, tr{
   color: white;
 }
 
-.important{
-  color: var(--or-color-300);
-}
-.important:hover{
-  color: var(--or-color-500);
-}
-
-.primary-button{
-  background-color: white;
-  color: black;
-  border: none;
-  font-size: 20px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--primary-color);
-  transition: all 0.3s ease-in-out;
-}
-.primary-button:hover{
-  background-color: var(--primary-color);
+.dark-mode .container{
   color: white;
 }
