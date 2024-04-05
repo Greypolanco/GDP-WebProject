@@ -31,3 +31,16 @@ export const Login = async (credential) => {
   const data = await response.json();
   return data;
 }
+
+//Tasks
+export const GetUserTasks = async (userId) => {
+  const response = await fetch(`${API_URL}/Task/usertasks/${userId}`);
+  const data = await response.json();
+  return data;
+}
+
+export const GetTask = async (taskid) =>{
+  const response = await fetch(`${API_URL}/Task/${taskid}`);
+  const data = await response.json();
+  return data;
+}
