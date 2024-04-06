@@ -38,19 +38,20 @@ export const Login = () => {
       </div>
       :
       <div className='login'>
-        <h2>Iniciar sesión</h2>
+        <h2>Iniciar Sesión</h2>
         <div className='user'>
           <label className='form-label' htmlFor="username">Usuario</label>
-          <input className='form-control' type="text" id="username" name="username" value={credentials.username} onChange={handleInputChange} />
+          <input className='form-control' type="text" placeholder='Ingrese su usuario' id="username" name="username" value={credentials.username} onChange={handleInputChange} />
         </div>
         <div className='password'>
           <label className='form-label' htmlFor="password">Contraseña</label>
-          <input className='form-control' type="password" id="password" name="password" value={credentials.password} onChange={handleInputChange} />
+          <input className='form-control' type="password" placeholder='Ingrese su contraseña'id="password" name="password" value={credentials.password} onChange={handleInputChange} />
         </div>
         {error && <div>{error}</div>}
         <div className='d-flex justify-content-center'>
           <button className='login-button' onClick={handleLogin}>Iniciar sesión</button>
         </div>
+         <p class="p">¿No tienes una cuenta? <span class="span">Registrate</span></p>
       </div>
   );
 };
