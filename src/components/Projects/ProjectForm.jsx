@@ -5,6 +5,7 @@ import { getUserById } from '../../services/UserService';
 import { getStatusColor } from '../../utils/utils';
 import { getUsers } from '../../services/UserService';
 import { updateTask } from '../../services/TaskService';
+import { useNavigate } from 'react-router-dom';
 
 export const ProjectForm = () => {
   const [participants, setParticipants] = useState([]);
@@ -15,6 +16,8 @@ export const ProjectForm = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(0);
   const [selectedRole, setSelectedRole] = useState(0);
+  const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  const navigate = useNavigate();
 
   // Manejar cambio en los inputs
   const onInputChange = (e) => {
@@ -22,18 +25,18 @@ export const ProjectForm = () => {
   }
 
   const handleUserSelect = async (userId) => {
-    try{
+    try {
       const userIdInt = parseInt(userId);
       setSelectedUser(userIdInt)
-    }catch(error){
+    } catch (error) {
       console.error(error);
     }
   }
   const handleRoleSelect = async (roleId) => {
-    try{
+    try {
       const roleIdInt = parseInt(roleId);
       setSelectedRole(roleIdInt)
-    }catch(error){
+    } catch (error) {
       console.error(error);
     }
   }
@@ -45,7 +48,7 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
-  
+
   const removeParticipant = async (userId) => {
     try {
       const response = await ProjectService.removeParticipant(id, userId);
@@ -94,7 +97,13 @@ export const ProjectForm = () => {
       getParticipants();
     }
   }, [project]);
-  
+
+  useEffect(() => {
+    if (!userLogged) {
+      navigate('/login');
+    }
+  }, [])
+
   return (
     <div className='card'>
       <div className='card-header text-center'>
