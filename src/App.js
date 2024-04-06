@@ -5,7 +5,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./App.css";
 import { AuthProvider } from './context/AppContext.jsx'
 //Componentes
-import { Navbar, ProjectsIndex, Login, ProjectConsult, ProjectView, TaskIndex, TaskView } from "./components/index.jsx";
+import {
+  Navbar, ProjectsIndex, Login,
+  ProjectConsult, ProjectView, TaskIndex,
+  TaskView, ProjectForm
+} from "./components/index.jsx";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -42,6 +46,8 @@ function App() {
             <Route exact path="/projects" element={<ProjectsIndex />} />
             <Route exact path="/projects/:id" element={<ProjectView />} />
             <Route path="/projects/consult" element={<ProjectConsult />} />
+            <Route path='/project/form/:id' element={<ProjectForm />} />
+            {/* Task routes */}
             <Route path='/tasks' element={<TaskIndex />} />
             <Route path='/tasks/:id' element={<TaskView />} />
           </Routes>
