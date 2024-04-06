@@ -108,6 +108,7 @@ export const ProjectForm = () => {
     const participant = project.participants.find(participant => participant.userId === userLogged.id);
     if (!participant) {
       console.log('El usuario no es participante del proyecto.');
+      navigate('/projects');
       return false;
     }
 
