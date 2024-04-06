@@ -7,3 +7,7 @@ export const getTasks = async (userId) => {
 export const getTask = async (taskid) => {
     return await api.GetTask(taskid)
 };
+
+export const updateTask = async (task) => {
+    return await api.updateTask(task)
+}
