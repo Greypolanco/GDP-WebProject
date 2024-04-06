@@ -46,7 +46,8 @@ function App() {
             <Route exact path="/projects" element={<ProjectsIndex />} />
             <Route exact path="/projects/:id" element={<ProjectView />} />
             <Route path="/projects/consult" element={<ProjectConsult />} />
-            <Route path='/project/form/:id' element={<ProjectForm />} />
+            <Route path='/projects/form' element={<ProjectForm />} />
+            <Route path='/projects/form/:id' element={<ProjectForm />} />
             {/* Task routes */}
             <Route path='/tasks' element={<TaskIndex />} />
             <Route path='/tasks/:id' element={<TaskView />} />

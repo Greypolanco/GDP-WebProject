@@ -49,7 +49,7 @@ export const ProjectsList = () => {
   }
 
   const handleEditClick = (projectId) => {
-    navigate(`/project/form/${projectId}`);
+    navigate(`/projects/form/${projectId}`);
   }
 
   const handleSearch = (event) => {

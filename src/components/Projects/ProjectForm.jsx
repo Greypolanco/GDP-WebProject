@@ -29,6 +29,7 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
+
   const handleRoleSelect = async (roleId) => {
     try {
       const roleIdInt = parseInt(roleId);
@@ -37,6 +38,25 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
+
+  const postProject = async () => {
+    try {
+      project.creatorId = userLogged.id;
+      project.title = project.title.toString();
+      project.description = project.description ? project.description.toString() : '';
+      project.startDate = project.startDate.toString();
+      project.endDate = project.endDate.toString();
+      project.note = project.note.toString();
+      project.status = parseInt(project.status);
+      project.tasks = [];
+      console.log(project);
+      const response = await ProjectService.postProject(project, userLogged.id);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const addParticipant = async () => {
     try {
       const response = await ProjectService.addParticipant(id, selectedUser, selectedRole);
@@ -87,46 +107,40 @@ export const ProjectForm = () => {
   }
 
   const verifyAccess = () => {
-    console.log('Verificando acceso...');
-
     if (!userLogged) {
-      console.log('Usuario no autenticado.');
       navigate('/login');
       return false;
     }
 
     if (project.creatorId === userLogged.id) {
-      console.log('El usuario es el creador del proyecto.');
       return true;
     }
 
     if (!project.participants || project.participants.length === 0) {
-      console.log('El proyecto no tiene participantes.');
       return false;
     }
 
     const participant = project.participants.find(participant => participant.userId === userLogged.id);
     if (!participant) {
-      console.log('El usuario no es participante del proyecto.');
       navigate('/projects');
       return false;
     }
 
-    console.log('El usuario es participante del proyecto.');
-
     if (participant.roleId === 1) {
-      console.log('El usuario es administrador del proyecto.');
       return true;
     }
-
-    console.log('El usuario no es administrador del proyecto.');
     navigate('/projects');
     return false;
   }
 
   useEffect(() => {
     const loadData = async () => {
-      await getProject();
+      if (id) {
+        await getProject();
+      } else {
+        setProject(initialState);
+      }
+
       await getUsersAsync();
     };
 
@@ -192,8 +206,19 @@ export const ProjectForm = () => {
             <label className='form-label' htmlFor='endDate'>Fecha de fin</label>
             <input type='date' value={project.endDate} onChange={onInputChange} className='form-control' id='endDate' name='endDate' />
           </div>
+          <div className='col-md-5'>
+            <div className="card-footer mt-3 d-flex justify-content-center">
+              <button className='btn btn-outline-warning m-2' onClick={postProject}>Guardar</button>
+              <button className='btn btn-outline-danger m-2'>Cancelar</button>
+            </div>
+          </div>
         </div>
-        <div className='row'>
+      </div>
+      <div className='card-header mt-3 text-center'>
+        <h3>Detalle del proyecto</h3>
+      </div>
+      <div className='card-body text-center'>
+      <div className='row mb-4'>
           <div className='col-md-5'>
             <label className='form-label' htmlFor='participant'>Participantes</label>
             <div className='input-group'>
@@ -209,17 +234,13 @@ export const ProjectForm = () => {
           <div className='col-md-3'>
             <label className='form-label' htmlFor='role'>Rol</label>
             <select onChange={(e) => handleRoleSelect(e.target.value)} className='form-select' id='role'>
-              <option value='0' hidden>Selecciona un rol</option>
+              <option value='0' hidden>Seleccione un rol</option>
               <option value='1'>Administrador</option>
               <option value='2'>Colaborador</option>
             </select>
           </div>
         </div>
-      </div>
-      <div className='card-header mt-3 text-center'>
-        <h3>Detalle del proyecto</h3>
-      </div>
-      <div className='card-body text-center'>
+
         <div className='row'>
           <div className='col-md-6'>
             <h4>Participantes del proyecto</h4>
