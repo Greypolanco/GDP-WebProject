@@ -57,6 +57,23 @@ body {
   background-color: white;
 }
 
+
+/* ESTILOS COMPARTIDOS*/
+.bi-trash{
+  color: red;
+}
+.bi-trash:hover{
+  color: var(--or-color-500);
+  cursor: pointer;
+}
+
+.dark-mode .bi-trash{
+  color: var(--or-color-500);
+}
+.dark-mode .bi-trash:hover{
+  color: var(--or-color-100);
+  cursor: pointer;
+}
 /* Estilos específicos para el tema oscuro */
 .dark-mode {
   --text-color: white;
