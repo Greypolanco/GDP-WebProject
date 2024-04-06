@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import * as ProjectService from '../../services/ProjectService';
-import { getStatusColor, formatDate } from '../../utils/utils';
-import '../../utils/utils.css';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as ProjectService from '../../services/ProjectService';
+import { formatDate, getStatusColor } from '../../utils/utils';
+import '../../utils/utils.css';
 
-export const ProjectsList = ({ onProjectSelect }) => {
+export const ProjectsList = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +25,24 @@ export const ProjectsList = ({ onProjectSelect }) => {
       setLoading(false);
     }
   };
+
+  const verifyIfAdmin = (project) => {
+    if (project.creatorId === userLogged.id) {
+      return true;
+    }
+
+    if (!project.participants || project.participants.length === 0) {
+      return false;
+    }
+
+    const participantFound = project.participants.find(participant => participant.userId === userLogged.id);
+
+    if (!participantFound) {
+      return false;
+    }
+
+    return participantFound.roleId === 1;
+  }
 
   const handleView = (projectId) => {
     navigate(`/projects/${projectId}`)
@@ -85,11 +102,9 @@ export const ProjectsList = ({ onProjectSelect }) => {
                       <td><div className={getStatusColor(project.status)}></div></td>
                       <td>
                         <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(project.id)}></button>
-                        {project.creatorId !== userLogged.id
-                          ? null
-                          : <button className='btn btn-outline-light bi bi-pencil m-1' onClick={() => handleEditClick(project.id)}></button>
+                        {verifyIfAdmin(project) &&
+                          <button className='btn btn-outline-light bi bi-pencil m-1' onClick={() => handleEditClick(project.id)}></button>
                         }
-                        
                       </td>
                     </tr>
                   ))}
