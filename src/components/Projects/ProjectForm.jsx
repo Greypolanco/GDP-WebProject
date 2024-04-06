@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as ProjectService from '../../services/ProjectService';
-import { getUserById } from '../../services/UserService';
+import { getUserById, getUsers } from '../../services/UserService';
 import { getStatusColor } from '../../utils/utils';
-import { getUsers } from '../../services/UserService';
-import { updateTask } from '../../services/TaskService';
-import { useNavigate } from 'react-router-dom';
 
 export const ProjectForm = () => {
   const [participants, setParticipants] = useState([]);
@@ -57,6 +54,7 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
+
   const getProject = async () => {
     try {
       const response = await ProjectService.getProject(id);
@@ -66,6 +64,7 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
+
   const getUsersAsync = async () => {
     try {
       const response = await getUsers();
@@ -87,9 +86,50 @@ export const ProjectForm = () => {
     }
   }
 
+  const verifyAccess = () => {
+    console.log('Verificando acceso...');
+
+    if (!userLogged) {
+      console.log('Usuario no autenticado.');
+      navigate('/login');
+      return false;
+    }
+
+    if (project.creatorId === userLogged.id) {
+      console.log('El usuario es el creador del proyecto.');
+      return true;
+    }
+
+    if (!project.participants || project.participants.length === 0) {
+      console.log('El proyecto no tiene participantes.');
+      return false;
+    }
+
+    const participant = project.participants.find(participant => participant.userId === userLogged.id);
+    if (!participant) {
+      console.log('El usuario no es participante del proyecto.');
+      return false;
+    }
+
+    console.log('El usuario es participante del proyecto.');
+
+    if (participant.roleId === 1) {
+      console.log('El usuario es administrador del proyecto.');
+      return true;
+    }
+
+    console.log('El usuario no es administrador del proyecto.');
+    navigate('/projects');
+    return false;
+  }
+
   useEffect(() => {
-    getProject();
-    getUsersAsync();
+    const loadData = async () => {
+      await getProject();
+      await getUsersAsync();
+    };
+
+    loadData();
   }, [id]);
 
   useEffect(() => {
@@ -101,8 +141,11 @@ export const ProjectForm = () => {
   useEffect(() => {
     if (!userLogged) {
       navigate('/login');
+    } else {
+      verifyAccess();
     }
-  }, [])
+  }, [project, userLogged]);
+
 
   return (
     <div className='card'>
