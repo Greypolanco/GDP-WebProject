@@ -31,6 +31,10 @@ export const ProjectsList = ({ onProjectSelect }) => {
     navigate(`/projects/${projectId}`)
   }
 
+  const handleEditClick = (projectId) => {
+    navigate(`/project/form/${projectId}`);
+  }
+
   const handleSearch = (event) => {
     const searchCriterion = event.target.value.toLowerCase();
     setCriterion(searchCriterion);
@@ -81,7 +85,11 @@ export const ProjectsList = ({ onProjectSelect }) => {
                       <td><div className={getStatusColor(project.status)}></div></td>
                       <td>
                         <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(project.id)}></button>
-                        <button className='btn btn-outline-primary bi bi-pencil m-1' disabled></button>
+                        {project.creatorId !== userLogged.id
+                          ? null
+                          : <button className='btn btn-outline-light bi bi-pencil m-1' onClick={() => handleEditClick(project.id)}></button>
+                        }
+                        
                       </td>
                     </tr>
                   ))}
