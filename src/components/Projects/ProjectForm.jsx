@@ -4,6 +4,7 @@ import * as ProjectService from '../../services/ProjectService';
 import { getUserById } from '../../services/UserService';
 import { getStatusColor } from '../../utils/utils';
 import { getUsers } from '../../services/UserService';
+import { updateTask } from '../../services/TaskService';
 
 export const ProjectForm = () => {
   const [participants, setParticipants] = useState([]);
@@ -12,31 +13,64 @@ export const ProjectForm = () => {
   const [project, setProject] = useState(initialState);
   const { id } = useParams();
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(0);
+  const [selectedRole, setSelectedRole] = useState(0);
 
   // Manejar cambio en los inputs
   const onInputChange = (e) => {
     setProject({ ...project, [e.target.name]: [e.target.value] });
   }
 
+  const handleUserSelect = async (userId) => {
+    try{
+      const userIdInt = parseInt(userId);
+      setSelectedUser(userIdInt)
+    }catch(error){
+      console.error(error);
+    }
+  }
+  const handleRoleSelect = async (roleId) => {
+    try{
+      const roleIdInt = parseInt(roleId);
+      setSelectedRole(roleIdInt)
+    }catch(error){
+      console.error(error);
+    }
+  }
+  const addParticipant = async () => {
+    try {
+      const response = await ProjectService.addParticipant(id, selectedUser, selectedRole);
+      getProject();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  const removeParticipant = async (userId) => {
+    try {
+      const response = await ProjectService.removeParticipant(id, userId);
+      getProject();
+    } catch (error) {
+      console.error(error);
+    }
+  }
   const getProject = async () => {
     try {
       const response = await ProjectService.getProject(id);
       setProject(response);
       setTasks(response.tasks);
-      getParticipants();
     } catch (error) {
       console.error(error);
     }
   }
   const getUsersAsync = async () => {
-    try{
+    try {
       const response = await getUsers();
       setUsers(response);
-    }catch(error){
+    } catch (error) {
       console.error(error);
     }
   }
-  
 
   const getParticipants = async () => {
     try {
@@ -57,12 +91,10 @@ export const ProjectForm = () => {
 
   useEffect(() => {
     if (Object.keys(project).length !== 0) {
-      console.log('sss');
       getParticipants();
     }
   }, [project]);
   
-
   return (
     <div className='card'>
       <div className='card-header text-center'>
@@ -107,13 +139,26 @@ export const ProjectForm = () => {
             <label className='form-label' htmlFor='endDate'>Fecha de fin</label>
             <input type='date' value={project.endDate} onChange={onInputChange} className='form-control' id='endDate' name='endDate' />
           </div>
-          <div className=''>
+        </div>
+        <div className='row'>
+          <div className='col-md-5'>
             <label className='form-label' htmlFor='participant'>Participantes</label>
-            <select className='form-select' id='participant'>
-              <option value='0' hidden>Selecciona un participante</option>
-              {users.map(user => {
-                return <option key={user.id} value={user.id}>{user.username}</option>
-              })}
+            <div className='input-group'>
+              <select onChange={(e) => handleUserSelect(e.target.value)} className='form-select' id='participant'>
+                <option value='0' hidden>Selecciona un participante</option>
+                {users.map(user => {
+                  return <option key={user.id} value={user.id}>{user.username}</option>
+                })}
+              </select>
+              <button className='btn btn-outline-warning' onClick={addParticipant}>Agregar</button>
+            </div>
+          </div>
+          <div className='col-md-3'>
+            <label className='form-label' htmlFor='role'>Rol</label>
+            <select onChange={(e) => handleRoleSelect(e.target.value)} className='form-select' id='role'>
+              <option value='0' hidden>Selecciona un rol</option>
+              <option value='1'>Administrador</option>
+              <option value='2'>Colaborador</option>
             </select>
           </div>
         </div>
@@ -131,6 +176,7 @@ export const ProjectForm = () => {
                   <th>Username</th>
                   <th>Email</th>
                   <th>Tareas</th>
+                  <th>Rol</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -146,8 +192,9 @@ export const ProjectForm = () => {
                         .join(', ')
                       }
                     </td>
+                    <td>{participant.roleId}</td>
 
-                    <td><i className='bi bi-trash' onClick={() => alert('Participante [' + participant.id + '] eliminado.')} /></td>
+                    <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -159,7 +206,7 @@ export const ProjectForm = () => {
               <thead>
                 <tr>
                   <th>Id</th>
-                  <th>Nombre</th>
+                  <th>Título</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
@@ -169,7 +216,7 @@ export const ProjectForm = () => {
                   <tr key={task.id}>
                     <td>{task.id}</td>
                     <td>{task.title}</td>
-                    <td><div className='d-flex justify-content-center'><div className={getStatusColor(task.status)}/></div></td>
+                    <td><div className='d-flex justify-content-center'><div className={getStatusColor(task.status)} /></div></td>
                     <td><i className='bi bi-trash' onClick={() => alert('Task [' + task.id + '] eliminada.')} /></td>
                   </tr>
                 ))}
