@@ -53,18 +53,30 @@ export const formatDate = (dateString) => {
 };
 
 export const getThumbnail = () => {
-  const option = Math.floor(Math.random() * 4) + 1;
+  const option = Math.floor(Math.random() * 8) + 1;
 
   switch (option) {
     case 1:
-      return 'https://i.ibb.co/QCx668B/turquese-hand.jpg';
+      return 'https://wallpaperset.com/w/full/3/4/f/7718.jpg';
     case 2:
-      return 'https://i.ibb.co/Rh9mN4v/green-hand.jpg';
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-light-pastel-purple-solid-color-background.jpg';
     case 3:
-      return 'https://i.ibb.co/12sdKXJ/red-hand.jpg';
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-pastel-blue-solid-color-background.jpg';
     case 4:
-      return 'https://i.ibb.co/0rdk28K/purple.jpg';
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-pastel-yellow-solid-color-background.jpg';
+    case 5:
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-pastel-pink-solid-color-background.jpg';
+    case 6:
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-pastel-green-solid-color-background.jpg';
+    case 7:
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-pastel-orange-solid-color-background.jpg';
+    case 8:
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-mint-green-solid-color-background.jpg';
+    case 9:
+      return 'https://www.solidbackgrounds.com/images/1920x1080/1920x1080-lavender-web-solid-color-background.jpg'
     default:
-      return 'https://i.ibb.co/QCx668B/turquese-hand.jpg';
+      return 'https://cdn.wallpapersafari.com/22/76/fyo3kG.jpg';
   }
+  
+  
 }

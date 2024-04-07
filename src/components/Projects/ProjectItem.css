@@ -22,17 +22,17 @@
 
 .item-container:hover h2{
   color: var(--or-color-900);
-
 }
 
 .item-container:hover .img-container img {
   transform: scale(1.1);
   border-radius: 24px;
 }
+
 .img-container img {
   flex: 0 0 200px;
   margin-right: 10px;
-  border: 1px solid var(--or-color-100);
+  border: 5px solid var(--or-color-500);
   transition: all 0.3s ease-in-out;
   border-radius: 12px;
 }
@@ -40,6 +40,7 @@
 .info-container {
   flex: 1;
   padding: 8px;
+  border-left: 1px solid var(--primary-color);
 }
 
 /* Dark mode */
@@ -67,7 +68,6 @@
 
 .dark-mode .item-container:hover h2{
   color: var(--or-color-900);
-
 }
 
 .dark-mode .item-container:hover .img-container img {

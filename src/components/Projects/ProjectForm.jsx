@@ -16,6 +16,7 @@ export const ProjectForm = () => {
   const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
   const navigate = useNavigate();
 
+
   // Manejar cambio en los inputs
   const onInputChange = (e) => {
     setProject({ ...project, [e.target.name]: [e.target.value] });
@@ -29,6 +30,7 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
+
   const handleRoleSelect = async (roleId) => {
     try {
       const roleIdInt = parseInt(roleId);
@@ -37,23 +39,85 @@ export const ProjectForm = () => {
       console.error(error);
     }
   }
-  const addParticipant = async () => {
+
+  const postProject = async () => {
     try {
-      const response = await ProjectService.addParticipant(id, selectedUser, selectedRole);
-      getProject();
+      project.creatorId = userLogged.id;
+      project.title = project.title.toString();
+      project.description = project.description ? project.description.toString() : '';
+      project.startDate = project.startDate.toString();
+      project.endDate = project.endDate.toString();
+      project.note = project.note.toString();
+      project.status = parseInt(project.status);
+      project.tasks = [];
+      console.log(project);
+      const response = await ProjectService.postProject(project, userLogged.id);
+      return response;
     } catch (error) {
       console.error(error);
     }
   }
 
-  const removeParticipant = async (userId) => {
-    try {
-      const response = await ProjectService.removeParticipant(id, userId);
-      getProject();
-    } catch (error) {
-      console.error(error);
+  const addParticipant = async () => {
+    if (selectedUser && selectedRole) {
+      if (!participants.find(participant => participant.id === userLogged.id)) {
+        const newParticipant = { projectId: project.id, userId: userLogged.id, roleId: 1 };
+        setParticipants([...participants, newParticipant]);
+
+        setProject(prevProject => ({
+          ...prevProject,
+          participants: [...prevProject.participants, newParticipant]
+        }));
+      }
+
+      if (participants.find(participant => participant.id === selectedUser)) {
+        alert('El usuario ya es parte del proyecto.');
+        return;
+      }
+
+      const newParticipant = { projectId: project.id, userId: selectedUser, roleId: selectedRole };
+      setParticipants([...participants, newParticipant]);
+
+      setProject(prevProject => ({
+        ...prevProject,
+        participants: [...prevProject.participants, newParticipant]
+      }));
     }
   }
+
+  const removeParticipant = async (userId) => {
+    if (userId === project.creatorId) {
+      alert('No puedes eliminar al creador del proyecto');
+      return;
+    }
+
+    const participantToRemove = project.participants.find(participant => participant.userId === userId);
+    if (participantToRemove.roleId === 1 && userLogged.id !== project.creatorId) {
+      alert('No puedes eliminar a otro administrador del proyecto');
+      return;
+    }
+
+    try {
+      // Remove the participant from the database
+      await ProjectService.removeParticipant(project.id, userId);
+
+      // Update local state to reflect the removed participant
+      const updatedParticipants = participants.filter(participant => participant.id !== userId);
+      setParticipants(updatedParticipants);
+
+      // Update project state to reflect the removed participant
+      setProject(prevProject => ({
+        ...prevProject,
+        participants: prevProject.participants.filter(participant => participant.userId !== userId)
+      }));
+
+      alert('Participante eliminado correctamente');
+    } catch (error) {
+      console.error('Error al eliminar el participante:', error);
+      alert('Error al eliminar el participante. Intente nuevamente');
+    }
+  };
+
 
   const getProject = async () => {
     try {
@@ -86,47 +150,60 @@ export const ProjectForm = () => {
     }
   }
 
-  const verifyAccess = () => {
-    console.log('Verificando acceso...');
 
+  const verifyAccess = async () => {
+    console.log('Verificando si tiene un id válido');
+    if (id <= 0 || !id) {
+      console.log('No hay ID, abriendo en modo creación.')
+      return false;
+    }
+    console.log('Hay ID, abriendo en modo edicion.')
+
+    console.log('Verificando acceso');
     if (!userLogged) {
-      console.log('Usuario no autenticado.');
+      console.log('No hay usuario logueado');
       navigate('/login');
       return false;
     }
 
-    if (project.creatorId === userLogged.id) {
-      console.log('El usuario es el creador del proyecto.');
-      return true;
-    }
+    try {
+      const projectFound = await ProjectService.getProject(id);
 
-    if (!project.participants || project.participants.length === 0) {
-      console.log('El proyecto no tiene participantes.');
-      return false;
-    }
+      if (projectFound.creatorId === userLogged.id) {
+        console.log(projectFound.creatorId, userLogged.id)
+        console.log('Es el creador del proyecto')
+        return true;
+      }
 
-    const participant = project.participants.find(participant => participant.userId === userLogged.id);
-    if (!participant) {
-      console.log('El usuario no es participante del proyecto.');
+      const participant = projectFound.participants.find(participant => participant.userId === userLogged.id);
+
+      if (!participant) {
+        navigate('/projects');
+        return false;
+      }
+
+      if (participant.roleId === 1) {
+        return true;
+      }
+
       navigate('/projects');
       return false;
+    } catch (error) {
+      console.error('Error al obtener el proyecto:', error);
+      return false;
     }
-
-    console.log('El usuario es participante del proyecto.');
-
-    if (participant.roleId === 1) {
-      console.log('El usuario es administrador del proyecto.');
-      return true;
-    }
-
-    console.log('El usuario no es administrador del proyecto.');
-    navigate('/projects');
-    return false;
   }
+
 
   useEffect(() => {
     const loadData = async () => {
-      await getProject();
+      if (id) {
+        await getProject();
+      } else {
+        setProject(initialState);
+        setTasks([]); //Limpiar tareas cuando es un nuevo formulario.
+      }
+
       await getUsersAsync();
     };
 
@@ -140,11 +217,7 @@ export const ProjectForm = () => {
   }, [project]);
 
   useEffect(() => {
-    if (!userLogged) {
-      navigate('/login');
-    } else {
-      verifyAccess();
-    }
+    verifyAccess();
   }, [project, userLogged]);
 
 
@@ -192,8 +265,19 @@ export const ProjectForm = () => {
             <label className='form-label' htmlFor='endDate'>Fecha de fin</label>
             <input type='date' value={project.endDate} onChange={onInputChange} className='form-control' id='endDate' name='endDate' />
           </div>
+          <div className='col-md-5'>
+            <div className="card-footer mt-3 d-flex justify-content-center">
+              <button className='btn btn-outline-warning m-2' onClick={postProject}>Guardar</button>
+              <button className='btn btn-outline-danger m-2'>Cancelar</button>
+            </div>
+          </div>
         </div>
-        <div className='row'>
+      </div>
+      <div className='card-header mt-3 text-center'>
+        <h3>Detalle del proyecto</h3>
+      </div>
+      <div className='card-body text-center'>
+        <div className='row mb-4'>
           <div className='col-md-5'>
             <label className='form-label' htmlFor='participant'>Participantes</label>
             <div className='input-group'>
@@ -209,47 +293,37 @@ export const ProjectForm = () => {
           <div className='col-md-3'>
             <label className='form-label' htmlFor='role'>Rol</label>
             <select onChange={(e) => handleRoleSelect(e.target.value)} className='form-select' id='role'>
-              <option value='0' hidden>Selecciona un rol</option>
+              <option value='0' hidden>Seleccione un rol</option>
               <option value='1'>Administrador</option>
               <option value='2'>Colaborador</option>
             </select>
           </div>
         </div>
-      </div>
-      <div className='card-header mt-3 text-center'>
-        <h3>Detalle del proyecto</h3>
-      </div>
-      <div className='card-body text-center'>
+
         <div className='row'>
           <div className='col-md-6'>
             <h4>Participantes del proyecto</h4>
             <table className='table table-sm'>
               <thead>
                 <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Tareas</th>
+                  <th>Id</th>
+                  <th>Nombre</th>
                   <th>Rol</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {participants.map(participant => (
-                  <tr key={participant.id}>
-                    <td>{participant.username}</td>
-                    <td>{participant.email}</td>
-                    <td>
-                      {participant.tasks
-                        .filter(task => task.projectId === project.id)
-                        .map(task => task.id)
-                        .join(', ')
-                      }
-                    </td>
-                    <td>{participant.roleId}</td>
-
-                    <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
-                  </tr>
-                ))}
+                {participants.map(participant => {
+                  const projectParticipant = project.participants.find(p => p.userId === participant.id);
+                  return (
+                    <tr key={participant.id}>
+                      <td>{participant.id}</td>
+                      <td>{participant.username}</td>
+                      <td>{projectParticipant.roleId}</td>
+                      <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

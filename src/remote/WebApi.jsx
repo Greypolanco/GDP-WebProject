@@ -1,7 +1,23 @@
-// const API_URL = 'http://gdpwebapi.somee.com/api'
-const API_URL = 'https://localhost:7032/api'
+const API_URL = 'http://gdp-web-api.somee.com/api'
+// const API_URL = 'https://localhost:7032/api'
 
 //Projects
+export const PostProject = async (project, creatorId) => {
+  try {
+    const response = await fetch(`${API_URL}/Project?creatorId=${creatorId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(project)
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
 export const GetProjects = async (userId) => {
   const response = await fetch(`${API_URL}/project/userprojects/${userId}`);
   const data = await response.json();

@@ -69,7 +69,8 @@ export const Navbar = () => {
                   Proyectos
                 </Link>
                 <div className={`dropdown-menu ${pjSubmenu ? 'show' : ''}`} aria-labelledby="navbarDropdown">
-                  <Link className="bi bi-bag-plus dropdown-item" to="/projects" onClick={handleSubmenuClick}> Vista general</Link>
+                  <Link className="bi bi-database dropdown-item" to="/projects" onClick={handleSubmenuClick}> Vista general</Link>
+                  <Link className="bi bi-file-earmark-plus dropdown-item" to="/projects/form" onClick={handleSubmenuClick}> Registro</Link>
                   <Link className="bi bi-list-stars dropdown-item" to="/projects/consult" onClick={handleSubmenuClick}> Consulta</Link>
                 </div>
               </li>
