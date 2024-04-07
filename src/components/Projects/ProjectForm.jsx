@@ -96,7 +96,7 @@ export const ProjectForm = () => {
       alert('No puedes eliminar a otro administrador del proyecto');
       return;
     }
-    
+
     try {
       // Remove the participant from the database
       await ProjectService.removeParticipant(project.id, userId);
@@ -313,14 +313,17 @@ export const ProjectForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {participants.map(participant => (
-                  <tr key={participant.id}>
-                    <td>{participant.id}</td>
-                    <td>{participant.username}</td>
-                    <td>{participant.role}</td>
-                    <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
-                  </tr>
-                ))}
+                {participants.map(participant => {
+                  const projectParticipant = project.participants.find(p => p.userId === participant.id);
+                  return (
+                    <tr key={participant.id}>
+                      <td>{participant.id}</td>
+                      <td>{participant.username}</td>
+                      <td>{projectParticipant.roleId}</td>
+                      <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
