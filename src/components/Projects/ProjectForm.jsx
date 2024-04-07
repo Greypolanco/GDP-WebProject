@@ -16,6 +16,7 @@ export const ProjectForm = () => {
   const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
   const navigate = useNavigate();
 
+
   // Manejar cambio en los inputs
   const onInputChange = (e) => {
     setProject({ ...project, [e.target.name]: [e.target.value] });
@@ -58,22 +59,65 @@ export const ProjectForm = () => {
   }
 
   const addParticipant = async () => {
-    try {
-      const response = await ProjectService.addParticipant(id, selectedUser, selectedRole);
-      getProject();
-    } catch (error) {
-      console.error(error);
+    if (selectedUser && selectedRole) {
+      if (!participants.find(participant => participant.id === userLogged.id)) {
+        const newParticipant = { projectId: project.id, userId: userLogged.id, roleId: 1 };
+        setParticipants([...participants, newParticipant]);
+
+        setProject(prevProject => ({
+          ...prevProject,
+          participants: [...prevProject.participants, newParticipant]
+        }));
+      }
+
+      if (participants.find(participant => participant.id === selectedUser)) {
+        alert('El usuario ya es parte del proyecto.');
+        return;
+      }
+
+      const newParticipant = { projectId: project.id, userId: selectedUser, roleId: selectedRole };
+      setParticipants([...participants, newParticipant]);
+
+      setProject(prevProject => ({
+        ...prevProject,
+        participants: [...prevProject.participants, newParticipant]
+      }));
     }
   }
 
   const removeParticipant = async (userId) => {
-    try {
-      const response = await ProjectService.removeParticipant(id, userId);
-      getProject();
-    } catch (error) {
-      console.error(error);
+    if (userId === project.creatorId) {
+      alert('No puedes eliminar al creador del proyecto');
+      return;
     }
-  }
+
+    const participantToRemove = project.participants.find(participant => participant.userId === userId);
+    if (participantToRemove.roleId === 1 && userLogged.id !== project.creatorId) {
+      alert('No puedes eliminar a otro administrador del proyecto');
+      return;
+    }
+    
+    try {
+      // Remove the participant from the database
+      await ProjectService.removeParticipant(project.id, userId);
+
+      // Update local state to reflect the removed participant
+      const updatedParticipants = participants.filter(participant => participant.id !== userId);
+      setParticipants(updatedParticipants);
+
+      // Update project state to reflect the removed participant
+      setProject(prevProject => ({
+        ...prevProject,
+        participants: prevProject.participants.filter(participant => participant.userId !== userId)
+      }));
+
+      alert('Participante eliminado correctamente');
+    } catch (error) {
+      console.error('Error al eliminar el participante:', error);
+      alert('Error al eliminar el participante. Intente nuevamente');
+    }
+  };
+
 
   const getProject = async () => {
     try {
@@ -106,32 +150,50 @@ export const ProjectForm = () => {
     }
   }
 
-  const verifyAccess = () => {
+
+  const verifyAccess = async () => {
+    console.log('Verificando si tiene un id válido');
+    if (id <= 0 || !id) {
+      console.log('No hay ID, abriendo en modo creación.')
+      return false;
+    }
+    console.log('Hay ID, abriendo en modo edicion.')
+
+    console.log('Verificando acceso');
     if (!userLogged) {
+      console.log('No hay usuario logueado');
       navigate('/login');
       return false;
     }
 
-    if (project.creatorId === userLogged.id) {
-      return true;
-    }
+    try {
+      const projectFound = await ProjectService.getProject(id);
 
-    if (!project.participants || project.participants.length === 0) {
-      return false;
-    }
+      if (projectFound.creatorId === userLogged.id) {
+        console.log(projectFound.creatorId, userLogged.id)
+        console.log('Es el creador del proyecto')
+        return true;
+      }
 
-    const participant = project.participants.find(participant => participant.userId === userLogged.id);
-    if (!participant) {
+      const participant = projectFound.participants.find(participant => participant.userId === userLogged.id);
+
+      if (!participant) {
+        navigate('/projects');
+        return false;
+      }
+
+      if (participant.roleId === 1) {
+        return true;
+      }
+
       navigate('/projects');
       return false;
+    } catch (error) {
+      console.error('Error al obtener el proyecto:', error);
+      return false;
     }
-
-    if (participant.roleId === 1) {
-      return true;
-    }
-    navigate('/projects');
-    return false;
   }
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -139,6 +201,7 @@ export const ProjectForm = () => {
         await getProject();
       } else {
         setProject(initialState);
+        setTasks([]); //Limpiar tareas cuando es un nuevo formulario.
       }
 
       await getUsersAsync();
@@ -154,11 +217,7 @@ export const ProjectForm = () => {
   }, [project]);
 
   useEffect(() => {
-    if (!userLogged) {
-      navigate('/login');
-    } else {
-      verifyAccess();
-    }
+    verifyAccess();
   }, [project, userLogged]);
 
 
@@ -218,7 +277,7 @@ export const ProjectForm = () => {
         <h3>Detalle del proyecto</h3>
       </div>
       <div className='card-body text-center'>
-      <div className='row mb-4'>
+        <div className='row mb-4'>
           <div className='col-md-5'>
             <label className='form-label' htmlFor='participant'>Participantes</label>
             <div className='input-group'>
@@ -247,9 +306,8 @@ export const ProjectForm = () => {
             <table className='table table-sm'>
               <thead>
                 <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Tareas</th>
+                  <th>Id</th>
+                  <th>Nombre</th>
                   <th>Rol</th>
                   <th>Acciones</th>
                 </tr>
@@ -257,17 +315,9 @@ export const ProjectForm = () => {
               <tbody>
                 {participants.map(participant => (
                   <tr key={participant.id}>
+                    <td>{participant.id}</td>
                     <td>{participant.username}</td>
-                    <td>{participant.email}</td>
-                    <td>
-                      {participant.tasks
-                        .filter(task => task.projectId === project.id)
-                        .map(task => task.id)
-                        .join(', ')
-                      }
-                    </td>
-                    <td>{participant.roleId}</td>
-
+                    <td>{participant.role}</td>
                     <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
                   </tr>
                 ))}
