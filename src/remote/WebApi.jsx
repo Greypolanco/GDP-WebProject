@@ -95,7 +95,7 @@ export const GetTask = async (taskid) =>{
   return data;
 }
 
-export const updateTask = async (task) => {
+export const UpdateTask = async (task) => {
   const response = await fetch(`${API_URL}/Task/update`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

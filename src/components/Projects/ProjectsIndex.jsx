@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import ProjectsList from './ProjectsList'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ProjectsList from './ProjectsList';
 
-export const ProjectsIndex = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
+const ProjectsIndex = () => {
   const navigate = useNavigate();
 
-  const handleProjectSelect = (project) => {
-    setSelectedProject(project);
-  };
-
   useEffect(() => {
-    const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+    const user = JSON.parse(localStorage.getItem('user'));
     if (!user) {
       navigate('/login');
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <div>
       <header>
-        asopdjk
+
       </header>
       <section>
-        <ProjectsList onProjectSelect={handleProjectSelect} />
+        <ProjectsList />
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default ProjectsIndex
+export default ProjectsIndex;

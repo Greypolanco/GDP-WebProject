@@ -1,39 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import * as ProjectService from '../../services/ProjectService'
+import { getProject } from '../../services/ProjectService';
 import { getUserById } from '../../services/UserService';
 
 export const ProjectView = () => {
-  const initialState = { id: 0, title: 'Not Found', description: '', status: '', startDate: '', endDate: '', note: '', participants: [], tasks: [] }
-  const [project, setProject] = useState(initialState);
+  const initialState = { id: 0, title: 'Not Found', description: '', status: '', startDate: '', endDate: '', note: '', participants: [], tasks: [] };
   const { id } = useParams();
+  const [project, setProject] = useState(initialState);
   const [participants, setParticipants] = useState([]);
 
-  const getProject = async () => {
-    try {
-      const response = await ProjectService.getProject(id);
-      setProject(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
   useEffect(() => {
-    const getParticipants = async () => {
+    const fetchProject = async () => {
       try {
-        const updatedParticipants = await Promise.all(project.participants.map(async (participant) => {
-          const response = await getUserById(participant.userId);
-          return response;
-        }));
+        const response = await getProject(id);
+        setProject(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProject();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const updatedParticipants = await Promise.all(
+          project.participants.map(async (participant) => {
+            const response = await getUserById(participant.userId);
+            return response;
+          })
+        );
         setParticipants(updatedParticipants);
       } catch (error) {
         console.error(error);
       }
+    };
+
+    if (project.participants.length > 0) {
+      fetchParticipants();
     }
-    getProject();
-    getParticipants();
   }, [project]);
-  
+
   return (
     <div className='card'>
       <div className='card-header text-center'>
@@ -63,7 +71,7 @@ export const ProjectView = () => {
         <div className='row'>
           <div className='col'>
             <h5>Note</h5>
-            <p>{project.note ==='' ? "-" : project.note}</p>
+            <p>{project.note === '' ? "-" : project.note}</p>
           </div>
         </div>
         <div className='row'>
@@ -103,7 +111,7 @@ export const ProjectView = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProjectView
+export default ProjectView;

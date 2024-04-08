@@ -294,9 +294,16 @@ export const ProjectForm = () => {
             <label className='form-label' htmlFor='role'>Rol</label>
             <select onChange={(e) => handleRoleSelect(e.target.value)} className='form-select' id='role'>
               <option value='0' hidden>Seleccione un rol</option>
-              <option value='1'>Administrador</option>
-              <option value='2'>Colaborador</option>
+              {userLogged && project.creatorId === userLogged.id ? (
+                <>
+                  <option value='1'>Administrador</option>
+                  <option value='2'>Colaborador</option>
+                </>
+              ) : (
+                <option value='2'>Colaborador</option>
+              )}
             </select>
+
           </div>
         </div>
 
@@ -319,11 +326,12 @@ export const ProjectForm = () => {
                     <tr key={participant.id}>
                       <td>{participant.id}</td>
                       <td>{participant.username}</td>
-                      <td>{projectParticipant.roleId}</td>
+                      <td>{projectParticipant ? projectParticipant.roleId : 'No asignado'}</td>
                       <td><i className='bi bi-trash' onClick={() => removeParticipant(participant.id)} /></td>
                     </tr>
                   );
                 })}
+
               </tbody>
             </table>
           </div>

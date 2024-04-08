@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import ProjectItem from './ProjectItem';
+import React, { useEffect, useState } from 'react';
 import * as ProjectService from '../../services/ProjectService';
-import * as UserService from '../../services/UserService';
-import { useAuth } from '../../context/AppContext';
-import { getStatusColor, formatDate, getUserByIdAsync } from '../../utils/utils';
 import '../../utils/utils.css';
-import { Link } from 'react-router-dom';
+import ProjectItem from './ProjectItem';
 
 export const ProjectsList = ({ onProjectSelect }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  const [error, setError] = useState(null);
+  const userLogged = JSON.parse(localStorage.getItem('user')) || null;
 
-  const listProjects = async () => {
+  const fetchProjects = async () => {
+    if (!userLogged) {
+      setError('Usuario no encontrado');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await ProjectService.getProjects(userLogged.id);
       if (Array.isArray(response)) {
         setProjects(response);
       } else {
-
+        setError('Error al obtener proyectos');
       }
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      setError('Error de red');
+      console.error(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -32,29 +36,29 @@ export const ProjectsList = ({ onProjectSelect }) => {
   };
 
   useEffect(() => {
-    listProjects();
+    fetchProjects();
   }, []);
 
+  if (loading) {
+    return <p>Cargando proyectos...</p>;
+  }
+  if (error) {
+    return <p>Ocurrió un error: {error}</p>;
+  }
+  if (projects.length === 0) {
+    return <p>No se encontraron proyectos para este usuario {':('}</p>;
+  }
+
   return (
-    <div>
-      {loading ? (
-        <p>Cargando proyectos...</p>
-      ) : projects.length === 0 ? (
-        <p>No se encontraron proyectos para este usuario {':('}</p>
-      ) : (
-        <div className='card'>
-          <div className='card-header'>
-            <h3>Tus proyectos</h3>
-          </div>
-          <div className='card-body'>
-            {
-              projects.map((project) => {
-                return <ProjectItem key={project.id} project={project} onSelect={handleProjectSelect} />
-              })
-            }
-          </div>
-        </div>
-      )}
+    <div className='card'>
+      <div className='card-header'>
+        <h3>Tus proyectos</h3>
+      </div>
+      <div className='card-body'>
+        {projects.map((project) => (
+          <ProjectItem key={project.id} project={project} onSelect={handleProjectSelect} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Collapse } from "react-bootstrap";
 import { useAuth } from "../../context/AppContext";
 import LogoutButton from '../Logout/LogoutButton';
 import LoginButton from "../Login/LoginButton";
@@ -8,12 +7,18 @@ import LoginButton from "../Login/LoginButton";
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [pjSubmenu, setPjSubmenu] = useState(false);
+  const [tasksSubmenu, setTasksSubmenu] = useState(false);
   const { user, setUser } = useAuth();
   const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
   const dropdownRef = useRef(null);
+  const tasksDropdownRef = useRef(null);
 
-  const handleSubmenuClick = () => {
-    setPjSubmenu(!pjSubmenu);
+  const handleSubmenuClick = (submenu) => {
+    if (submenu === 'projects') {
+      setPjSubmenu(!pjSubmenu);
+    } else if (submenu === 'tasks') {
+      setTasksSubmenu(!tasksSubmenu);
+    }
   }
 
   useEffect(() => {
@@ -24,6 +29,9 @@ export const Navbar = () => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setPjSubmenu(false);
+      }
+      if (tasksDropdownRef.current && !tasksDropdownRef.current.contains(event.target)) {
+        setTasksSubmenu(false);
       }
     };
 
@@ -50,42 +58,50 @@ export const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
         </div>
-        <Collapse in={open}>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/">
-                  Inicio
-                </Link>
-              </li>
-              <li className="nav-item dropdown" ref={dropdownRef}>
-                <Link
-                  className="nav-link dropdown-toggle"
-                  to="#"
-                  id="navbarDropdown"
-                  role="button"
-                  onClick={handleSubmenuClick}
-                >
-                  Proyectos
-                </Link>
-                <div className={`dropdown-menu ${pjSubmenu ? 'show' : ''}`} aria-labelledby="navbarDropdown">
-                  <Link className="bi bi-database dropdown-item" to="/projects" onClick={handleSubmenuClick}> Vista general</Link>
-                  <Link className="bi bi-file-earmark-plus dropdown-item" to="/projects/form" onClick={handleSubmenuClick}> Registro</Link>
-                  <Link className="bi bi-list-stars dropdown-item" to="/projects/consult" onClick={handleSubmenuClick}> Consulta</Link>
-                </div>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/tasks">
-                  Tareas
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </Collapse>
-        <div className="justify-content-end">
-          <div className="navbar-nav">
-            {user ? <LogoutButton /> : <LoginButton />}
-          </div>
+        <div className={`collapse navbar-collapse ${open ? 'show' : ''}`} id="navbarNav">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link className="nav-link" aria-current="page" to="/">
+                Inicio
+              </Link>
+            </li>
+            <li className="nav-item dropdown" ref={dropdownRef}>
+              <Link
+                className="nav-link dropdown-toggle"
+                to="#"
+                id="navbarDropdown"
+                role="button"
+                onClick={() => handleSubmenuClick('projects')}
+              >
+                Proyectos
+              </Link>
+              <div className={`dropdown-menu ${pjSubmenu ? 'show' : ''}`} aria-labelledby="navbarDropdown">
+                <Link className="bi bi-database dropdown-item" to="/projects" onClick={() => handleSubmenuClick('projects')}> Vista general</Link>
+                <Link className="bi bi-file-earmark-plus dropdown-item" to="/projects/form" onClick={() => handleSubmenuClick('projects')}> Registro</Link>
+                <Link className="bi bi-list-stars dropdown-item" to="/projects/consult" onClick={() => handleSubmenuClick('projects')}> Consulta</Link>
+              </div>
+            </li>
+            <li className="nav-item dropdown" ref={tasksDropdownRef}>
+              <Link
+                className="nav-link dropdown-toggle"
+                to="#"
+                id="tasksDropdown"
+                role="button"
+                onClick={() => handleSubmenuClick('tasks')}
+              >
+                Tareas
+              </Link>
+              <div className={`dropdown-menu ${tasksSubmenu ? 'show' : ''}`} aria-labelledby="tasksDropdown">
+                <Link className="bi bi-list-ul dropdown-item" to="/tasks" onClick={() => handleSubmenuClick('tasks')}> Lista de tareas</Link>
+                <Link className="bi bi-file-earmark-plus dropdown-item" to="/tasks/form" onClick={() => handleSubmenuClick('tasks')}> Nueva tarea</Link>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="ms-2 me-2">
+        <div className="navbar-nav">
+          {user ? <LogoutButton /> : <LoginButton />}
         </div>
       </div>
     </nav>

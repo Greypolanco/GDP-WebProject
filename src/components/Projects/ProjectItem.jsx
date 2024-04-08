@@ -1,17 +1,16 @@
 import React from 'react';
-import './ProjectItem.css';
-import { getStatusColor, formatDate, getStatusText, getThumbnail } from '../../utils/utils';
-import '../../utils/utils.css';
 import { useNavigate } from 'react-router-dom';
+import { formatDate, getStatusColor, getStatusText, getThumbnail } from '../../utils/utils';
+import '../../utils/utils.css';
+import './ProjectItem.css';
 
-export const ProjectItem = ({ project, onSelect }) => {
+const ProjectItem = ({ project }) => {
   const navigate = useNavigate();
   const thumbnail = getThumbnail();
 
   const handleClick = () => {
-    navigate(`/projects/${project.id}`)
-    //onSelect(project);
-  }
+    navigate(`/projects/${project.id}`);
+  };
 
   return (
     <div className='item-container card m-2' onClick={handleClick}>
@@ -25,7 +24,8 @@ export const ProjectItem = ({ project, onSelect }) => {
         <div className='d-flex'>
           <strong>Estado:</strong>
           <div className={`ms-1 mt-1 me-1 ${getStatusColor(project.status)}`}>
-          </div>{getStatusText(project.status)}
+          </div>
+          {getStatusText(project.status)}
         </div>
       </section>
     </div>

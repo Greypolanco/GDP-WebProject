@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as ProjectService from '../../services/ProjectService';
+import { getProjects } from '../../services/ProjectService';
 import { formatDate, getStatusColor } from '../../utils/utils';
 import '../../utils/utils.css';
 
@@ -10,47 +10,39 @@ export const ProjectsList = () => {
   const [loading, setLoading] = useState(true);
   const [criterion, setCriterion] = useState('');
   const [originalProjects, setOriginalProjects] = useState([]);
-  const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  const userLogged = JSON.parse(localStorage.getItem('user')) || null;
 
   const listProjects = async () => {
     try {
-      const response = await ProjectService.getProjects(userLogged.id);
+      const response = await getProjects(userLogged?.id);
       if (Array.isArray(response)) {
         setProjects(response);
         setOriginalProjects(response);
       }
       setLoading(false);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
 
   const verifyIfAdmin = (project) => {
-    if (project.creatorId === userLogged.id) {
-      return true;
-    }
+    if (!project) return false;
 
-    if (!project.participants || project.participants.length === 0) {
-      return false;
-    }
+    if (project.creatorId === userLogged?.id) return true;
 
-    const participantFound = project.participants.find(participant => participant.userId === userLogged.id);
+    const participantFound = project.participants?.find(participant => participant.userId === userLogged?.id);
 
-    if (!participantFound) {
-      return false;
-    }
-
-    return participantFound.roleId === 1;
-  }
+    return participantFound && participantFound.roleId === 1;
+  };
 
   const handleView = (projectId) => {
-    navigate(`/projects/${projectId}`)
-  }
+    navigate(`/projects/${projectId}`);
+  };
 
   const handleEditClick = (projectId) => {
     navigate(`/projects/form/${projectId}`);
-  }
+  };
 
   const handleSearch = (event) => {
     const searchCriterion = event.target.value.toLowerCase();
