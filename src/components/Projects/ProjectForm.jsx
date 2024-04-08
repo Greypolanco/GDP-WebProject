@@ -266,7 +266,7 @@ export const ProjectForm = () => {
             <input type='date' value={project.endDate} onChange={onInputChange} className='form-control' id='endDate' name='endDate' />
           </div>
           <div className='col-md-5'>
-            <div className="card-footer mt-3 d-flex justify-content-center">
+            <div className="mt-3 d-flex justify-content-center">
               <button className='btn btn-outline-warning m-2' onClick={postProject}>Guardar</button>
               <button className='btn btn-outline-danger m-2'>Cancelar</button>
             </div>
@@ -287,7 +287,7 @@ export const ProjectForm = () => {
                   return <option key={user.id} value={user.id}>{user.username}</option>
                 })}
               </select>
-              <button className='btn btn-outline-warning' onClick={addParticipant}>Agregar</button>
+              <button className='btn-primary' onClick={addParticipant}>Agregar</button>
             </div>
           </div>
           <div className='col-md-3'>

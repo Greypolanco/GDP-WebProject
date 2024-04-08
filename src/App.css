@@ -57,23 +57,32 @@ body {
   background-color: white;
 }
 
-
-/* ESTILOS COMPARTIDOS*/
-.bi-trash{
+.bi-trash {
   color: red;
 }
-.bi-trash:hover{
+
+.bi-trash:hover {
   color: var(--or-color-500);
   cursor: pointer;
 }
 
-.dark-mode .bi-trash{
+/* ESTILOS COMPARTIDOS*/
+.table {
+  border: 1px solid var(--primary-color);
+  text-align: center;
+}
+
+/*---------------------------------------------*/
+
+.dark-mode .bi-trash {
   color: var(--or-color-500);
 }
-.dark-mode .bi-trash:hover{
+
+.dark-mode .bi-trash:hover {
   color: var(--or-color-100);
   cursor: pointer;
 }
+
 /* Estilos específicos para el tema oscuro */
 .dark-mode {
   --text-color: white;
@@ -95,48 +104,55 @@ body {
   border-bottom: 1px solid var(--primary-color);
 }
 
+.dark-mode .card-footer {
+  background-color: var(--card-header-color);
+  color: white;
+  border-top: 1px solid var(--primary-color);
+}
+
 .dark-mode .table {
   background-color: #2b2b2b;
-  border: var(--primary-color) 1px solid;
 }
 
 .dark-mode .table th {
   background-color: #585858;
   color: white;
 }
+
 .dark-mode .table td {
   background-color: #2b2b2b;
 }
 
-.dark-mode .table td, tr{
+.dark-mode .table td,
+tr {
   color: white;
 }
 
-.dark-mode .container{
+.dark-mode .container {
   color: white;
 }
 
-.dark-mode .login{
+.dark-mode .login {
   background-color: #151717;
   border: 1px solid var(--yw-color-500);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.dark-mode .login h2{
+.dark-mode .login h2 {
   color: white;
 }
 
-.dark-mode .login-button{
+.dark-mode .login-button {
   background-color: var(--or-color-500);
   border: 1px solid #000408;
   box-shadow: rgba(56, 55, 55, 0.582) 0px 3px 8px;
 }
 
-.dark-mode .login-button:hover{
+.dark-mode .login-button:hover {
   background: #2d79f3;
   border: 1px solid var(--yw-color-500);
 }
 
-.dark-mode .login .p{
+.dark-mode .login .p {
   color: white;
 }
