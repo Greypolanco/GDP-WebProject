@@ -287,7 +287,7 @@ export const ProjectForm = () => {
                   return <option key={user.id} value={user.id}>{user.username}</option>
                 })}
               </select>
-              <button className='btn-primary' onClick={addParticipant}>Agregar</button>
+              <button className='btn btn-outline-warning' onClick={addParticipant}>Agregar</button>
             </div>
           </div>
           <div className='col-md-3'>
