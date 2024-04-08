@@ -91,7 +91,7 @@ export const ProjectsList = () => {
                       <td>{project.id}</td>
                       <td>{project.title}</td>
                       <td>{formatDate(project.startDate)}</td>
-                      <td><div className={getStatusColor(project.status)}></div></td>
+                      <td><div className='d-flex justify-content-center'><div className={getStatusColor(project.status)} /></div></td>
                       <td>
                         <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(project.id)}></button>
                         {verifyIfAdmin(project) &&
