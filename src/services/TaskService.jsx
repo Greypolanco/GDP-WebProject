@@ -1,13 +1,13 @@
-import * as api from "../remote/WebApi";
+import { GetUserTasks, GetTask, UpdateTask} from "../remote/WebApi";
 
 export const getTasks = async (userId) => {
-    return await api.GetUserTasks(userId); 
+    return await GetUserTasks(userId); 
 };
 
 export const getTask = async (taskid) => {
-    return await api.GetTask(taskid)
+    return await GetTask(taskid)
 };
 
 export const updateTask = async (task) => {
-    return await api.updateTask(task)
+    return await UpdateTask(task)
 }
