@@ -294,7 +294,7 @@ export const ProjectForm = () => {
             <label className='form-label' htmlFor='role'>Rol</label>
             <select onChange={(e) => handleRoleSelect(e.target.value)} className='form-select' id='role'>
               <option value='0' hidden>Seleccione un rol</option>
-              {userLogged && project.creatorId === userLogged.id ? (
+              {userLogged && project.creatorId === userLogged.id || project.id <= 0 ? (
                 <>
                   <option value='1'>Administrador</option>
                   <option value='2'>Colaborador</option>
