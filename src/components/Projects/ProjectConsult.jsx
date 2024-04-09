@@ -51,8 +51,14 @@ export const ProjectsList = () => {
     setProjects(filteredList);
   };
 
+  const isDarkTheme = () => {
+    const darkMode = document.body.classList.contains('dark-mode');
+    return darkMode ? 'light' : 'dark';
+  }
+
   useEffect(() => {
     listProjects();
+    isDarkTheme();
   }, []);
 
   return (
@@ -95,7 +101,10 @@ export const ProjectsList = () => {
                       <td>
                         <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(project.id)}></button>
                         {verifyIfAdmin(project) &&
-                          <button className='btn btn-outline-light bi bi-pencil m-1' onClick={() => handleEditClick(project.id)}></button>
+                          <>
+                            <button className={`btn btn-outline-${isDarkTheme()} bi bi-pencil m-1`} onClick={() => handleEditClick(project.id)}></button>
+                            <button className='btn btn-outline-danger bi bi-trash m-1'></button>
+                          </>
                         }
                       </td>
                     </tr>

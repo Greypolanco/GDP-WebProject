@@ -194,6 +194,10 @@ export const ProjectForm = () => {
     }
   }
 
+  const onCancelEvent = () => {
+    navigate('/projects/consult');
+  }
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -268,7 +272,7 @@ export const ProjectForm = () => {
           <div className='col-md-5'>
             <div className="mt-3 d-flex justify-content-center">
               <button className='btn btn-outline-warning m-2' onClick={postProject}>Guardar</button>
-              <button className='btn btn-outline-danger m-2'>Cancelar</button>
+              <button className='btn btn-outline-danger m-2' onClick={onCancelEvent}>Cancelar</button>
             </div>
           </div>
         </div>
@@ -294,7 +298,7 @@ export const ProjectForm = () => {
             <label className='form-label' htmlFor='role'>Rol</label>
             <select onChange={(e) => handleRoleSelect(e.target.value)} className='form-select' id='role'>
               <option value='0' hidden>Seleccione un rol</option>
-              {userLogged && project.creatorId === userLogged.id ? (
+              {userLogged && project.creatorId === userLogged.id || project.id <= 0 ? (
                 <>
                   <option value='1'>Administrador</option>
                   <option value='2'>Colaborador</option>
