@@ -6,3 +6,4 @@ export { default as ProjectForm } from "./Projects/ProjectForm";
 export { default as Login } from "./Login/Login";
 export {default as TaskIndex} from "./Tasks/TaskIndex";
 export {default as TaskView} from "./Tasks/TaskView";
+export {default as TaskConsult} from "./Tasks/TaskConsult";

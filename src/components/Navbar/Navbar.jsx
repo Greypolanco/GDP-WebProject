@@ -93,7 +93,7 @@ export const Navbar = () => {
               </Link>
               <div className={`dropdown-menu ${tasksSubmenu ? 'show' : ''}`} aria-labelledby="tasksDropdown">
                 <Link className="bi bi-list-ul dropdown-item" to="/tasks" onClick={() => handleSubmenuClick('tasks')}> Lista de tareas</Link>
-                <Link className="bi bi-file-earmark-plus dropdown-item" to="/tasks/form" onClick={() => handleSubmenuClick('tasks')}> Nueva tarea</Link>
+                <Link className="bi bi-file-earmark-plus dropdown-item" to="/tasks/consult" onClick={() => handleSubmenuClick('tasks')}> Consulta</Link>
               </div>
             </li>
           </ul>
