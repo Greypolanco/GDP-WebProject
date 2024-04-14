@@ -156,3 +156,29 @@ tr {
 .dark-mode .login .p {
   color: white;
 }
+
+/* Register */
+.dark-mode .register {
+  background-color: #151717;
+  border: 1px solid var(--yw-color-500);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.dark-mode .register h2 {
+  color: white;
+}
+
+.dark-mode .register-button {
+  background-color: var(--or-color-500);
+  border: 1px solid #000408;
+  box-shadow: rgba(56, 55, 55, 0.582) 0px 3px 8px;
+}
+
+.dark-mode .register-button:hover {
+  background: #2d79f3;
+  border: 1px solid var(--yw-color-500);
+}
+
+.dark-mode .register .p {
+  color: white;
+}
