@@ -8,7 +8,8 @@ import { AuthProvider } from './context/AppContext.jsx'
 import {
   Navbar, ProjectsIndex, Login,
   ProjectConsult, ProjectView, TaskIndex,
-  TaskView, ProjectForm, TaskConsult
+  TaskView, ProjectForm, TaskConsult,
+  TaskForm
 } from "./components/index.jsx";
 
 function App() {
@@ -52,6 +53,8 @@ function App() {
             <Route path='/tasks' element={<TaskIndex />} />
             <Route path='/tasks/:id' element={<TaskView />} />
             <Route path='/tasks/consult' element={ <TaskConsult/> }/>
+            <Route path='/tasks/form' element={<TaskForm />} />
+            <Route path='tasks/form/:id' element={<TaskForm />} />
           </Routes>
         </div>
       </BrowserRouter>
