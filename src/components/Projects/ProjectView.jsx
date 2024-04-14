@@ -10,20 +10,27 @@ export const ProjectView = () => {
   const [project, setProject] = useState(initialState);
   const [participants, setParticipants] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const userLogged = JSON.parse(localStorage.getItem('user'));
 
   const handleStatusChange = async (e) => {
     const status = e.target.value;
     const statusInt = parseInt(status);
     console.log(statusInt);
     console.log(status);
-    setProject({ ...project, status: statusInt }); // Actualiza el estado local del proyecto
+    setProject({ ...project, status: statusInt });
     try {
-      await updateStatus(project.id, statusInt); // Pasa projectId y el nuevo estado a updateStatus
+      await updateStatus(project.id, statusInt);
     } catch (error) {
       console.error(error);
     }
   };
   
+  const verifyIfAdmin = () => {
+    if(project.participants.length > 0){
+      project.participants.some(participant => participant.userId === userLogged.id && participant.roleId === 1) ? setIsAdmin(true) : setIsAdmin(false);
+      };
+    }
 
   const handleStatusClick = () => {
     if (editMode === true) {
@@ -43,7 +50,6 @@ export const ProjectView = () => {
         console.error(error);
       }
     };
-
     fetchProject();
   }, [id]);
 
@@ -57,6 +63,7 @@ export const ProjectView = () => {
           })
         );
         setParticipants(updatedParticipants);
+        verifyIfAdmin();
       } catch (error) {
         console.error(error);
       }
@@ -95,12 +102,16 @@ export const ProjectView = () => {
                   <p>{getStatusText(project.status)}</p>
                 </div>
               }
-              <button className=
-                {`ms-2 ${editMode
-                  ? 'btn btn-success bi bi-check-circle'
-                  : 'btn btn-secondary bi bi-pencil'}`
-                } onClick={handleStatusClick}>
-              </button>
+              {
+                isAdmin
+                ? <button className=
+                  {`ms-2 ${editMode
+                    ? 'btn btn-success bi bi-check-circle'
+                    : 'btn btn-secondary bi bi-pencil'}`
+                  } onClick={handleStatusClick}>
+                </button>
+                : null
+              }
             </div>
           </div>
         </div>
