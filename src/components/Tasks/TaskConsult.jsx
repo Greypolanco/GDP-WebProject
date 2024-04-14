@@ -84,7 +84,7 @@ const TaskConsult = () => {
     <div>
       <div className='card'>
         <div className='card-header'>
-          <h3>Tasks</h3>
+          <h3>Tus Tareas</h3>
           <div className='input-group'>
             <input type='text' className='form-control' placeholder='Buscar tarea...' onChange={handleSearch} />
             <button className='btn btn-secondary bi bi-search' type='button'></button>
@@ -94,7 +94,7 @@ const TaskConsult = () => {
           {loading
             ?
             <div className='spinner-border text-warning' role='status'>
-              <span className='visually-hidden'>Loading...</span>
+              <span className='visually-hidden'>Cargando...</span>
             </div>
             : tasks.length === 0
               ?
@@ -105,12 +105,12 @@ const TaskConsult = () => {
               <table className='table'>
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Project</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>Título</th>
+                    <th>Proyecto</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
