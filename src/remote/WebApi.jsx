@@ -48,6 +48,19 @@ export const RemoveParticipant = async (projectId, userId) => {
   return data;
 }
 
+export const UpdateStatus = async (projectId, status) => {
+  const response = await fetch(`${API_URL}/Project/${projectId}/updatestatus`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(status)
+  });
+  const data = await response.json();
+  return data;
+}
+
+
 //Users
 export const GetUsers = async () => {
   const response = await fetch(`${API_URL}/user`);
