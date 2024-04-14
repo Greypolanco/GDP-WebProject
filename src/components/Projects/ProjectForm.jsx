@@ -198,6 +198,11 @@ export const ProjectForm = () => {
     navigate('/projects/consult');
   }
 
+  const handleEditEvent = (taskId) => {
+    navigate(`/tasks/form/${taskId}`);
+  
+  }
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -358,7 +363,10 @@ export const ProjectForm = () => {
                     <td>{task.title}</td>
                     <td>{task.userId}</td>
                     <td><div className='d-flex justify-content-center'><div className={getStatusColor(task.status)} /></div></td>
-                    <td><i className='bi bi-trash' onClick={() => alert('Task [' + task.id + '] eliminada.')} /></td>
+                    <td>
+                      <i className='bi bi-pencil-square m-2' onClick={() => handleEditEvent(task.id)} />
+                      <i className='bi bi-trash' />
+                    </td>
                   </tr>
                 ))}
               </tbody>

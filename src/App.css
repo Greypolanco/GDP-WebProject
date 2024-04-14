@@ -66,6 +66,15 @@ body {
   cursor: pointer;
 }
 
+.bi-pencil-square{
+  color: var(--or-color-500);
+}
+
+.bi-pencil-square:hover{
+  color: var(--or-color-950);
+  cursor: pointer;
+}
+
 /* ESTILOS COMPARTIDOS*/
 .table {
   border: 1px solid var(--primary-color);
@@ -79,6 +88,15 @@ body {
 }
 
 .dark-mode .bi-trash:hover {
+  color: var(--or-color-100);
+  cursor: pointer;
+}
+
+.dark-mode .bi-pencil-square {
+  color: gold;
+}
+
+.dark-mode .bi-pencil-square:hover {
   color: var(--or-color-100);
   cursor: pointer;
 }
