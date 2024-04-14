@@ -1,13 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProject } from '../../services/ProjectService';
+import { getProject, updateStatus } from '../../services/ProjectService';
 import { getUserById } from '../../services/UserService';
+import { getStatusColor, getStatusText } from '../../utils/utils';
 
 export const ProjectView = () => {
   const initialState = { id: 0, title: 'Not Found', description: '', status: '', startDate: '', endDate: '', note: '', participants: [], tasks: [] };
   const { id } = useParams();
   const [project, setProject] = useState(initialState);
   const [participants, setParticipants] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+
+  const handleStatusChange = async (e) => {
+    const status = e.target.value;
+    const statusInt = parseInt(status);
+    console.log(statusInt);
+    console.log(status);
+    setProject({ ...project, status: statusInt }); // Actualiza el estado local del proyecto
+    try {
+      await updateStatus(project.id, statusInt); // Pasa projectId y el nuevo estado a updateStatus
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  const handleStatusClick = () => {
+    if (editMode === true) {
+      setEditMode(false);
+    }
+    else {
+      setEditMode(true);
+    }
+  }
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -55,7 +80,28 @@ export const ProjectView = () => {
           </div>
           <div className='col'>
             <h5>Status</h5>
-            <p>{project.status}</p>
+            <div className='d-flex'>
+              {editMode
+                ?
+                <select value={project.status} onChange={handleStatusChange}>
+                  <option value='1'>En progreso</option>
+                  <option value='2'>Pendiente</option>
+                  <option value='3'>Completado</option>
+                  <option value='4'>Detenido</option>
+                </select>
+                :
+                <div className='d-flex'>
+                  <div className={`me-1 ${getStatusColor(project.status)}`}></div>
+                  <p>{getStatusText(project.status)}</p>
+                </div>
+              }
+              <button className=
+                {`ms-2 ${editMode
+                  ? 'btn btn-success bi bi-check-circle'
+                  : 'btn btn-secondary bi bi-pencil'}`
+                } onClick={handleStatusClick}>
+              </button>
+            </div>
           </div>
         </div>
         <div className='row'>
