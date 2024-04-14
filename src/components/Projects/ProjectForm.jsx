@@ -346,6 +346,7 @@ export const ProjectForm = () => {
                 <tr>
                   <th>Id</th>
                   <th>Título</th>
+                  <th>Encargado</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
@@ -355,6 +356,7 @@ export const ProjectForm = () => {
                   <tr key={task.id}>
                     <td>{task.id}</td>
                     <td>{task.title}</td>
+                    <td>{task.userId}</td>
                     <td><div className='d-flex justify-content-center'><div className={getStatusColor(task.status)} /></div></td>
                     <td><i className='bi bi-trash' onClick={() => alert('Task [' + task.id + '] eliminada.')} /></td>
                   </tr>
