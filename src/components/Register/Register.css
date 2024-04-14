@@ -1,0 +1,110 @@
+.register{
+  position: relative;
+  padding: 60px;
+  background: #f8f9fa;
+  backdrop-filter: blur(5px);
+  border: 0.05 solid #000814;
+  border-radius: 20px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  margin: auto; 
+  margin-top: 0.1%;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.register h2{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  color:#000814;
+  font-weight: bold;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.register .user{
+  font-weight: bold;
+  position: relative;
+  width: 100%;
+  padding: 10px 8px;
+  text-align: left;
+  outline: none;
+  font-size: 1.15em;
+  color: 000814;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 0px;
+}
+
+.register .user::placeholder{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.register .password{
+  font-weight: bold;
+  position: relative;
+  width: 100%;
+  padding: 10px 8px;
+  outline: none;
+  font-size: 1.15em;
+  color: 000814;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 4px;
+}
+.register .password::placeholder{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.register .user input,
+.register .password input {
+  outline: none;
+  font-size: 1.2em;
+  color: #000; 
+  border-radius: 5px;
+  border: 1px solid #ccc; 
+  background-color: #fff; 
+}
+
+.register-button {
+  margin: 10px 0;
+  background-color: #151717;
+  border: 1px solid #000408;
+  color: white;
+  font-size: 19px;
+  font-weight: 500;
+  border-radius: 15px;
+  height: 60px;
+  width: 100%;
+  padding: 15px 40px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-button:hover {
+  background: var(--or-color-500);
+  border: 1px solid var(--yw-color-500);
+  transform: scale(0.95);
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.p {
+  text-align: center;
+  color: black;
+  font-size: 14px;
+  margin: 5px 3px;
+  padding: 15px 0;
+}
+
+.span {
+  font-size: 14px;
+  margin-left: 5px;
+  color: #2d79f3;
+  font-weight: 500;
+  cursor: pointer;
+}
