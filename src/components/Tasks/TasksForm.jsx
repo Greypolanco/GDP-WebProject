@@ -87,7 +87,7 @@ const TasksForm = () => {
         await TaskService.postTask(task)
       }
       setTask(initialState)
-      navigate('/tasks/consult')
+      navigate(`/projects/${projectSelected}`)
     } catch (error) {
       console.error(error)
     }
