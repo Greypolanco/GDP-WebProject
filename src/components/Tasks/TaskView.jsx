@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as TaskService from "../../services/TaskService";
+import { getProject } from "../../services/ProjectService";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { formatDate, getStatusColor, getStatusText } from "../../utils/utils";
@@ -24,7 +25,19 @@ const TaskView = () => {
   const getTask = async () => {
     try {
       const response = await TaskService.getTask(id);
-      userLogged.id === response.userId ? setTask(response) : navigate('/tasks')
+      const projectFound = await getProject(response.projectId);
+      setTask(response);
+      if(projectFound.participants.some(participant => participant.userId === userLogged.id && participant.roleId === 1)){
+        setTask(response);
+        setEditMode(false);
+      }
+      else if(response.userId === userLogged.id){
+        setTask(response);
+        setEditMode(false);
+      }
+      else{
+        navigate(`/tasks`);
+      }
     } catch (error) {
       console.error(error);
     }
