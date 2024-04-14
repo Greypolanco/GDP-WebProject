@@ -47,12 +47,8 @@ export const ProjectView = () => {
     navigate(`/tasks/${taskId}`);
   }
 
-  const handleTaskEdi = () => {
-
-  }
-
-  const handleTaskDelete = () => {
-
+  const handleTaskEdit = (taskId) => {
+    navigate(`/tasks/form/${taskId}`);
   }
 
   useEffect(() => {
@@ -198,8 +194,7 @@ export const ProjectView = () => {
                           ?
                           <>
                             <button className='btn btn-outline-warning bi bi-eye' onClick={() => handleTaskView(task.id)}></button>
-                            <button className='btn btn-outline-secondary bi bi-pencil' onClick={handleTaskEdi}></button>
-                            <button className='btn btn-outline-danger bi bi-trash' onClick={handleTaskDelete}></button>
+                            <button className='btn btn-outline-secondary bi bi-pencil' onClick={() => handleTaskEdit(task.id)}></button>
                           </>
                           : task.userId === userLogged.id ? <button className='btn btn-outline-warning bi bi-eye' onClick={() => handleTaskView(task.id)}></button> : 'No'
                       }

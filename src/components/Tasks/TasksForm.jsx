@@ -31,12 +31,19 @@ const TasksForm = () => {
   const getTask = async () => {
     try {
       const response = await TaskService.getTask(id)
+      const projectFound = await ProjectService.getProject(response.projectId);
       const formattedTask = {
         ...response,
         startDate: response.startDate ? new Date(response.startDate).toISOString().split('T')[0] : '',
         endDate: response.endDate ? new Date(response.endDate).toISOString().split('T')[0] : ''
       };
-      userLogged.id === response.userId ? setTask(formattedTask) : navigate('/tasks')
+      setTask(response);
+      if(projectFound.participants.some(participant => participant.userId === userLogged.id && participant.roleId === 1)){
+        setTask(response);
+      }
+      else{
+        navigate(`/tasks`);
+      }
     } catch (error) {
       console.error(error)
     }
