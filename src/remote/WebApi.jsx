@@ -17,6 +17,15 @@ export const PostProject = async (project, creatorId) => {
   }
 }
 
+export const DeleteProject = async (projectId) => {
+  const response = await fetch(`${API_URL}/Project/${projectId}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const data = await response.json();
+  return data;
+
+}
 
 export const GetProjects = async (userId) => {
   const response = await fetch(`${API_URL}/project/userprojects/${userId}`);

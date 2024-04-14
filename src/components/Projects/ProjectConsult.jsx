@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProjects } from '../../services/ProjectService';
+import { getProjects, deleteProject } from '../../services/ProjectService';
 import { formatDate, getStatusColor } from '../../utils/utils';
 import '../../utils/utils.css';
 
@@ -11,6 +11,7 @@ export const ProjectsList = () => {
   const [criterion, setCriterion] = useState('');
   const [originalProjects, setOriginalProjects] = useState([]);
   const userLogged = JSON.parse(localStorage.getItem('user')) || null;
+  const [projectToDelete, setProjectToDelete] = useState(null);
 
   const listProjects = async () => {
     try {
@@ -54,6 +55,29 @@ export const ProjectsList = () => {
   const isDarkTheme = () => {
     const darkMode = document.body.classList.contains('dark-mode');
     return darkMode ? 'light' : 'dark';
+  }
+
+  const onDeleteConfirm = async () => {
+    try {
+      await deleteProject(projectToDelete.id);
+      setProjectToDelete(0);
+      listProjects();
+    } catch (error) {
+      console.error(error);
+    }
+    closeDialog();
+  }
+  const onCancelConfirm = () => {
+    closeDialog();
+  }
+
+  const openDialog = (project) => {
+    setProjectToDelete(project);
+    document.getElementById('dialog').showModal()
+  }
+
+  const closeDialog = () => {
+    document.getElementById('dialog').close()
   }
 
   useEffect(() => {
@@ -103,7 +127,7 @@ export const ProjectsList = () => {
                         {verifyIfAdmin(project) &&
                           <>
                             <button className={`btn btn-outline-${isDarkTheme()} bi bi-pencil m-1`} onClick={() => handleEditClick(project.id)}></button>
-                            <button className='btn btn-outline-danger bi bi-trash m-1'></button>
+                            <button className='btn btn-outline-danger bi bi-trash m-1' onClick={() => openDialog(project)}></button>
                           </>
                         }
                       </td>
@@ -114,6 +138,33 @@ export const ProjectsList = () => {
           }
         </div>
       </div>
+      <dialog id='dialog' className='dialog'>
+        <div className='dialog-content'>
+          <div className='dialog-header'>
+            <h3>¿Estás seguro de eliminar el proyecto?</h3>
+          </div>
+          <div className='dialog-body p-2'>
+            {projectToDelete &&
+              <>
+                <div className='card'>
+                  <div className='card-header'>
+                    <h3>{projectToDelete.id}- {projectToDelete.title}</h3>
+                  </div>
+                  <div className='card-body'>
+                    <p><strong>Descripción: </strong>{projectToDelete.description}</p>
+                    <p><strong>Fecha de inicio: </strong>{formatDate(projectToDelete.startDate)}</p>
+                    <p><strong>Estado: </strong>{projectToDelete.status}</p>
+                  </div>
+                </div>
+              </>
+            }
+          </div>
+          <div className='dialog-footer d-flex justify-content-center'>
+            <button className='btn btn-danger me-2' onClick={onDeleteConfirm}>Eliminar</button>
+            <button className='btn btn-secondary ms-2' onClick={onCancelConfirm}>Cancelar</button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
