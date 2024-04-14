@@ -24,7 +24,7 @@ export const ProjectsList = ({ onProjectSelect }) => {
         setError('Error al obtener proyectos');
       }
     } catch (error) {
-      setError('Error de red');
+      setError(error.value);
       console.error(error);
     } finally {
       setLoading(false);

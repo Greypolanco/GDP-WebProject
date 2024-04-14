@@ -8,3 +8,4 @@ export { default as TaskIndex } from "./Tasks/TaskIndex";
 export { default as TaskView } from "./Tasks/TaskView";
 export { default as TaskConsult } from "./Tasks/TaskConsult";
 export { default as TaskForm } from './Tasks/TasksForm';
+export { default as Register} from './Register/Register';

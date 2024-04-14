@@ -9,7 +9,7 @@ import {
   Navbar, ProjectsIndex, Login,
   ProjectConsult, ProjectView, TaskIndex,
   TaskView, ProjectForm, TaskConsult,
-  TaskForm
+  TaskForm, Register
 } from "./components/index.jsx";
 
 function App() {
@@ -43,6 +43,7 @@ function App() {
           </button>
           <Routes>
             <Route exact path="/login" element={<Login />} />
+            <Route exact path='/register' element={<Register />} />
             {/* Project routes */}
             <Route exact path="/projects" element={<ProjectsIndex />} />
             <Route exact path="/projects/:id" element={<ProjectView />} />

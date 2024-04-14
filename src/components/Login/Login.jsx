@@ -29,6 +29,14 @@ export const Login = () => {
     setLoading(false);
   };
 
+  const handleRegister = async () => {
+    try {
+      navigate("/Register");
+    } catch (error) {
+      setError(" Por favor, intenta de nuevo.");
+    }
+  };
+
   return (
     (loading)
       ?
@@ -51,7 +59,7 @@ export const Login = () => {
         <div className='d-flex justify-content-center'>
           <button className='login-button' onClick={handleLogin}>Iniciar sesión</button>
         </div>
-         <p class="p">¿No tienes una cuenta? <span class="span">Registrate</span></p>
+         <p class="p">¿No tienes una cuenta? <span class="span" onClick={handleRegister}>Registrate</span></p>
       </div>
   );
 };

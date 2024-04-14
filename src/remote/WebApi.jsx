@@ -104,6 +104,17 @@ export const Login = async (credential) => {
   return data;
 }
 
+//Register
+export const Register = async (user) => {
+  const response = await fetch(`${API_URL}/Auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  });
+  const data = await response.json();
+  return data;
+}
+
 //Tasks
 export const GetUserTasks = async (userId) => {
   const response = await fetch(`${API_URL}/Task/usertasks/${userId}`);
