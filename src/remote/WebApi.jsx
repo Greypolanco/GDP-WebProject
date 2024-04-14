@@ -104,3 +104,13 @@ export const UpdateTask = async (task) => {
   const data = await response.json();
   return data;
 }
+
+export const PostTask = async (task) => {
+  const response = await fetch(`${API_URL}/Task`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(task)
+  });
+  const data = await response.json();
+  return data;
+}

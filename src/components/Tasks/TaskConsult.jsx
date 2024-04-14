@@ -8,15 +8,18 @@ import '../../utils/utils.css';
 const TaskConsult = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
+  const [originalTasks, setOriginalTasks] = useState([]); // Nuevo estado para almacenar las tareas originales [1]
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false); // Nuevo estado para almacenar si el usuario es administrador o no
   const userLogged = JSON.parse(localStorage.getItem('user')) || null;
+  const [criterion, setCriterion] = useState('');
 
   const listTasks = async () => {
     try {
       const response = await getTasks(userLogged.id);
       if (Array.isArray(response)) {
         setTasks(response);
+        setOriginalTasks(response);
       }
       setLoading(false);
     } catch (error) {
@@ -43,7 +46,8 @@ const TaskConsult = () => {
 
   const handleSearch = (event) => {
     const searchCriterion = event.target.value.toLowerCase();
-    const filteredList = tasks.filter(task => task.title.toLowerCase().includes(searchCriterion));
+    setCriterion(searchCriterion);
+    const filteredList = originalTasks.filter(task => task.title.toLowerCase().includes(searchCriterion));
     setTasks(filteredList);
   };
 
@@ -51,8 +55,14 @@ const TaskConsult = () => {
     navigate(`/tasks/form/${taskId}`);
   };
 
+  const isDarkTheme = () => {
+    const darkMode = document.body.classList.contains('dark-mode');
+    return darkMode ? 'light' : 'dark';
+  }
+
   useEffect(() => {
     listTasks();
+    isDarkTheme();
   }, []);
 
   useEffect(() => {
@@ -68,45 +78,62 @@ const TaskConsult = () => {
     };
 
     checkAdminStatus();
-  }, [tasks]);
+  }, [originalTasks]);
 
   return (
     <div>
       <div className='card'>
         <div className='card-header'>
           <h3>Tasks</h3>
-          <div>
-            <input type='text' placeholder='Search' onChange={handleSearch} />
+          <div className='input-group'>
+            <input type='text' className='form-control' placeholder='Buscar tarea...' onChange={handleSearch} />
+            <button className='btn btn-secondary bi bi-search' type='button'></button>
           </div>
         </div>
         <div className='card-body'>
-          <table className='table'>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Project</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.map(task => (
-                <tr key={task.id}>
-                  <td>{task.title}</td>
-                  <td>{task.projectId}</td>
-                  <td>{formatDate(task.startDate)}</td>
-                  <td>{formatDate(task.endDate)}</td>
-                  <td><div className={getStatusColor(task.status)}></div></td>
-                  <td>
-                    <button className='btn btn-outline-warning bi bi-eye' onClick={() => handleView(task.id)}></button>
-                    {isAdmin && <button className='btn btn-outline-light bi bi-pencil' onClick={() => handleEditClick(task.id)}></button>}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {loading
+            ?
+            <div className='spinner-border text-warning' role='status'>
+              <span className='visually-hidden'>Loading...</span>
+            </div>
+            : tasks.length === 0
+              ?
+              <div className='alert alert-warning'>No hay tareas para mostrar con el criterio:
+                <strong> '{criterion}'</strong>
+              </div>
+              :
+              <table className='table'>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Project</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tasks.map(task => (
+                    <tr key={task.id}>
+                      <td>{task.title}</td>
+                      <td>{task.projectId}</td>
+                      <td>{formatDate(task.startDate)}</td>
+                      <td>{formatDate(task.endDate)}</td>
+                      <td>
+                        <div className='d-flex justify-content-center'>
+                          <div className={getStatusColor(task.status)}></div>
+                        </div>
+                      </td>
+                      <td>
+                        <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(task.id)}></button>
+                        {isAdmin && <button className={`btn btn-outline-${isDarkTheme()} bi bi-pencil`} onClick={() => handleEditClick(task.id)}></button>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+          }
         </div>
       </div>
     </div>
