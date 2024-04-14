@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProject, updateStatus } from '../../services/ProjectService';
 import { getUserById } from '../../services/UserService';
-import { getStatusColor, getStatusText } from '../../utils/utils';
+import { getStatusColor, getStatusText, formatDate } from '../../utils/utils';
 
 export const ProjectView = () => {
   const initialState = { id: 0, title: 'Not Found', description: '', status: '', startDate: '', endDate: '', note: '', participants: [], tasks: [] };
@@ -25,12 +25,12 @@ export const ProjectView = () => {
       console.error(error);
     }
   };
-  
+
   const verifyIfAdmin = () => {
-    if(project.participants.length > 0){
+    if (project.participants.length > 0) {
       project.participants.some(participant => participant.userId === userLogged.id && participant.roleId === 1) ? setIsAdmin(true) : setIsAdmin(false);
-      };
-    }
+    };
+  }
 
   const handleStatusClick = () => {
     if (editMode === true) {
@@ -104,13 +104,13 @@ export const ProjectView = () => {
               }
               {
                 isAdmin
-                ? <button className=
-                  {`ms-2 ${editMode
-                    ? 'btn btn-success bi bi-check-circle'
-                    : 'btn btn-secondary bi bi-pencil'}`
-                  } onClick={handleStatusClick}>
-                </button>
-                : null
+                  ? <button className=
+                    {`ms-2 ${editMode
+                      ? 'btn btn-success bi bi-check-circle'
+                      : 'btn btn-secondary bi bi-pencil'}`
+                    } onClick={handleStatusClick}>
+                  </button>
+                  : null
               }
             </div>
           </div>
@@ -125,18 +125,17 @@ export const ProjectView = () => {
             <p>{project.endDate}</p>
           </div>
         </div>
-        <div className='row'>
-          <div className='col'>
-            <h5>Note</h5>
-            <p>{project.note === '' ? "-" : project.note}</p>
-          </div>
+        <div className='col'>
+          <h5>Note</h5>
+          <p>{project.note === '' ? "-" : project.note}</p>
         </div>
-        <div className='row'>
-          <div className='col-md-5'>
+        <div className='row text-center'>
+          <div className='col-md-5 me-5'>
             <h5>Participantes</h5>
             <table className='table table-sm'>
               <thead>
                 <tr>
+                  <th>Id</th>
                   <th>Username</th>
                   <th>Nombre</th>
                   <th>Apellido</th>
@@ -146,6 +145,7 @@ export const ProjectView = () => {
               <tbody>
                 {participants.map(participant => (
                   <tr key={participant.id}>
+                    <td>{participant.id}</td>
                     <td>{participant.username}</td>
                     <td>{participant.name}</td>
                     <td>{participant.surname}</td>
@@ -155,15 +155,34 @@ export const ProjectView = () => {
               </tbody>
             </table>
           </div>
-        </div>
-        <div className='row'>
-          <div className='col'>
-            <h5>Tasks</h5>
-            <ul>
-              {project.tasks.map(task => (
-                <li key={task.id}>{task.title}</li>
-              ))}
-            </ul>
+          <div className='col-md-6'>
+            <h5>Tareas</h5>
+            <table className='table table-sm ms-5'>
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Encargado</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {project.tasks.map(task => (
+                  <tr key={task.id}>
+                    <td>{task.title}</td>
+                    <td>{task.userId}</td>
+                    <td>{formatDate(task.startDate)}</td>
+                    <td>{formatDate(task.endDate)}</td>
+                    <td>
+                      <div className='d-flex justify-content-center'>
+                        <div className={`me-1 ${getStatusColor(task.status)}`}></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

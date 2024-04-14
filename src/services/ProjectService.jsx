@@ -1,11 +1,15 @@
 import {
   AddParticipant, GetProject, GetProjects,
-  PostProject, RemoveParticipant, UpdateStatus
+  PostProject, RemoveParticipant, UpdateStatus,
+  DeleteProject
 } from "../remote/WebApi";
 
 export const postProject = async (project, creatorId) => {
   return await PostProject(project, creatorId)
+}
 
+export const deleteProject = async (projectId) => {
+  return await DeleteProject(projectId)
 }
 
 export const getProjects = async (userId) => {
