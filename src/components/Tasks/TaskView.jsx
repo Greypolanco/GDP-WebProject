@@ -63,12 +63,12 @@ const TaskView = () => {
       <div className="card-body">
         <div className="row">
           <div className="col">
-            <h3>Description</h3>
+            <h3>Descripción</h3>
             <p>{task.description}</p>
           </div>
           <div className="col">
             <div className="d-flex">
-              <h5>Status</h5>
+              <h5>Estado</h5>
             </div>
             <div className="d-flex">
               {editMode
@@ -97,17 +97,17 @@ const TaskView = () => {
         </div>
         <div className="row">
           <div className="col">
-            <h5>Start Date</h5>
+            <h5>Fecha de inicio</h5>
             <p>{formatDate(task.startDate)}</p>
           </div>
           <div className="col">
-            <h5>End Date</h5>
+            <h5>Fecha de fin</h5>
             <p>{formatDate(task.endDate)}</p>
           </div>
         </div>
         <div className="row">
           <div className="col">
-            <h5>Note</h5>
+            <h5>Nota</h5>
             <p>{task.note === "" ? "-" : task.note}</p>
           </div>
         </div>
