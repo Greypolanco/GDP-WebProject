@@ -78,16 +78,16 @@ const TasksForm = () => {
       task.endDate = task.endDate.toString();
       task.note = task.note ? task.note.toString() : ' ';
       task.userId = task.userId ? parseInt(task.userId) : userLogged.id;
-      task.projectId = parseInt(task.projectId);
+      task.projectId = projectSelected ? parseInt(projectSelected) : 0;
       task.id = parseInt(task.id);
       console.log(task)
-      // if (id) {
-      //   await TaskService.updateTask(task)
-      // } else {
-      //   await TaskService.postTask(task)
-      // }
-      // setTask(initialState)
-      // navigate('/tasks/consult')
+      if (id) {
+        await TaskService.updateTask(task)
+      } else {
+        await TaskService.postTask(task)
+      }
+      setTask(initialState)
+      navigate('/tasks/consult')
     } catch (error) {
       console.error(error)
     }
