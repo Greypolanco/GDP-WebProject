@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as ProjectService from '../../services/ProjectService';
+import { deleteTask } from '../../services/TaskService';
 import { getUserById, getUsers } from '../../services/UserService';
-import { getStatusColor } from '../../utils/utils';
+import { getStatusColor, formatDate } from '../../utils/utils';
 
 export const ProjectForm = () => {
   const [participants, setParticipants] = useState([]);
@@ -15,6 +16,7 @@ export const ProjectForm = () => {
   const [selectedRole, setSelectedRole] = useState(0);
   const userLogged = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
   const navigate = useNavigate();
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
 
   // Manejar cambio en los inputs
@@ -200,9 +202,27 @@ export const ProjectForm = () => {
 
   const handleEditEvent = (taskId) => {
     navigate(`/tasks/form/${taskId}`);
-  
   }
 
+  const openDialog = (task) => {
+    setTaskToDelete(task);
+    document.getElementById('dialog').showModal();
+  }
+  
+  const closeDialog = () => {
+    document.getElementById('dialog').close();
+  }
+
+  const handleDeleteEvent = async () => {
+    try {
+      await deleteTask(taskToDelete.id);
+      setTasks(tasks.filter(task => task.id !== taskToDelete.id));
+      setTaskToDelete(null);
+      closeDialog();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -212,7 +232,6 @@ export const ProjectForm = () => {
         setProject(initialState);
         setTasks([]); //Limpiar tareas cuando es un nuevo formulario.
       }
-
       await getUsersAsync();
     };
 
@@ -365,7 +384,7 @@ export const ProjectForm = () => {
                     <td><div className='d-flex justify-content-center'><div className={getStatusColor(task.status)} /></div></td>
                     <td>
                       <i className='bi bi-pencil-square m-2' onClick={() => handleEditEvent(task.id)} />
-                      <i className='bi bi-trash' />
+                      <i className='bi bi-trash' onClick={() => openDialog(task)} />
                     </td>
                   </tr>
                 ))}
@@ -374,6 +393,33 @@ export const ProjectForm = () => {
           </div>
         </div>
       </div>
+      <dialog id='dialog' className='dialog'>
+        <div className='dialog-content'>
+          <div className='dialog-header'>
+            <h3>¿Estás seguro de eliminar esta tarea?</h3>
+          </div>
+          <div className='dialog-body p-2'>
+            {taskToDelete &&
+              <>
+                <div className='card'>
+                  <div className='card-header'>
+                    <h3>{taskToDelete.id}- {taskToDelete.title}</h3>
+                  </div>
+                  <div className='card-body'>
+                    <p><strong>Descripción: </strong>{taskToDelete.description}</p>
+                    <p><strong>Fecha de inicio: </strong>{formatDate(taskToDelete.startDate)}</p>
+                    <p><strong>Estado: </strong>{taskToDelete.status}</p>
+                  </div>
+                </div>
+              </>
+            }
+          </div>
+          <div className='dialog-footer d-flex justify-content-center'>
+            <button className='btn btn-danger me-2' onClick={handleDeleteEvent} >Eliminar</button>
+            <button className='btn btn-secondary ms-2' onClick={closeDialog}>Cancelar</button>
+          </div>
+        </div>
+      </dialog>
     </div>
   )
 }
