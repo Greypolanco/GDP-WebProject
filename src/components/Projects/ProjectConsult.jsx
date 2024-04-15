@@ -37,6 +37,10 @@ export const ProjectsList = () => {
     return participantFound && participantFound.roleId === 1;
   };
 
+  const verifyIfCreator = (project) => {
+    return project.creatorId === userLogged?.id;
+  }
+
   const handleView = (projectId) => {
     navigate(`/projects/${projectId}`);
   };
@@ -127,8 +131,12 @@ export const ProjectsList = () => {
                         {verifyIfAdmin(project) &&
                           <>
                             <button className={`btn btn-outline-${isDarkTheme()} bi bi-pencil m-1`} onClick={() => handleEditClick(project.id)}></button>
-                            <button className='btn btn-outline-danger bi bi-trash m-1' onClick={() => openDialog(project)}></button>
+                            {
+                              verifyIfCreator(project) &&
+                              <button className='btn btn-outline-danger bi bi-trash m-1' onClick={() => openDialog(project)}></button>
+                            }
                           </>
+                            
                         }
                       </td>
                     </tr>
