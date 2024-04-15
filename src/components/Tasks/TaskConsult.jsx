@@ -28,17 +28,6 @@ const TaskConsult = () => {
     }
   };
 
-  const verifyIfAdmin = async (task) => {
-    if (!task) return false;
-
-    const projectFound = await getProject(task.projectId);
-    if (!projectFound) return false;
-
-    const participantFound = projectFound.participants?.find(participant => participant.userId === userLogged.id);
-    if (!participantFound) return false;
-
-    return participantFound.roleId === 1;
-  };
 
   const handleView = (taskId) => {
     navigate(`/tasks/${taskId}`);
@@ -60,25 +49,34 @@ const TaskConsult = () => {
     return darkMode ? 'light' : 'dark';
   }
 
+  const verifyIfAdmin = (task) => {
+    try {
+      // Obtener el proyecto al que pertenece la tarea
+      const project = tasks.find(task => task.projectId === task.id);
+
+      // Verificar si el usuario es el creador del proyecto
+      if (project.creatorId === userLogged.id) {
+        return true;
+      }
+
+      // Verificar si el usuario es administrador del proyecto
+      const participant = project.participants.find(participant => participant.userId === userLogged.id && participant.roleId === 1);
+      if (participant) {
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error(error);
+      return false; // En caso de error, asumimos que el usuario no es administrador
+    }
+  };
+
   useEffect(() => {
     listTasks();
     isDarkTheme();
   }, []);
 
-  useEffect(() => {
-    // Verificar si el usuario es administrador al cargar las tareas
-    const checkAdminStatus = async () => {
-      // Suponemos que el usuario no es administrador
-      setIsAdmin(false);
-      // Verificar la administración para la primera tarea en la lista
-      if (tasks.length > 0) {
-        const isAdmin = await verifyIfAdmin(tasks[0]); // Verificar si el usuario es administrador para la primera tarea
-        setIsAdmin(isAdmin); // Actualizar el estado con el resultado
-      }
-    };
-
-    checkAdminStatus();
-  }, [originalTasks]);
 
   return (
     <div>
@@ -127,7 +125,9 @@ const TaskConsult = () => {
                       </td>
                       <td>
                         <button className='btn btn-outline-warning bi bi-eye m-1' onClick={() => handleView(task.id)}></button>
-                        {isAdmin && <button className={`btn btn-outline-${isDarkTheme()} bi bi-pencil`} onClick={() => handleEditClick(task.id)}></button>}
+                        {verifyIfAdmin(task) && (
+                          <button className={`btn btn-outline-${isDarkTheme()} bi bi-pencil`} onClick={() => handleEditClick(task.id)}></button>
+                        )}
                       </td>
                     </tr>
                   ))}
