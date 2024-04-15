@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AppContext";
 import LogoutButton from '../Logout/LogoutButton';
 import LoginButton from "../Login/LoginButton";
+import logonavbar from '../../Img/logonavbar.png';
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,7 @@ export const Navbar = () => {
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
       <div className="container-fluid">
         <Link className="navbar-brand important" to="#">
-          {user ? `${user.name} ${user.surname}` : '@SingletonCoders'}
+          {user ? `${user.name} ${user.surname}` : <img src={logonavbar} alt="logo" width={100}/>}
         </Link>
         <div className="d-flex align-items-center">
           <button
