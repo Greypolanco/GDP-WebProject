@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getProject, updateStatus } from '../../services/ProjectService';
 import { getUserById } from '../../services/UserService';
 import { getStatusColor, getStatusText, formatDate } from '../../utils/utils';
@@ -12,6 +12,7 @@ export const ProjectView = () => {
   const [editMode, setEditMode] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const userLogged = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
 
   const handleStatusChange = async (e) => {
     const status = e.target.value;
@@ -39,6 +40,15 @@ export const ProjectView = () => {
     else {
       setEditMode(true);
     }
+  }
+
+  const handleTaskView = (taskId) => {
+    console.log('view task: '+taskId);
+    navigate(`/tasks/${taskId}`);
+  }
+
+  const handleTaskEdit = (taskId) => {
+    navigate(`/tasks/form/${taskId}`);
   }
 
   useEffect(() => {
@@ -162,9 +172,9 @@ export const ProjectView = () => {
                 <tr>
                   <th>Título</th>
                   <th>Encargado</th>
-                  <th>Inicio</th>
                   <th>Fin</th>
                   <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,12 +182,22 @@ export const ProjectView = () => {
                   <tr key={task.id}>
                     <td>{task.title}</td>
                     <td>{task.userId}</td>
-                    <td>{formatDate(task.startDate)}</td>
                     <td>{formatDate(task.endDate)}</td>
                     <td>
                       <div className='d-flex justify-content-center'>
                         <div className={`me-1 ${getStatusColor(task.status)}`}></div>
                       </div>
+                    </td>
+                    <td>
+                      {
+                        isAdmin
+                          ?
+                          <>
+                            <button className='btn btn-outline-warning bi bi-eye' onClick={() => handleTaskView(task.id)}></button>
+                            <button className='btn btn-outline-secondary bi bi-pencil' onClick={() => handleTaskEdit(task.id)}></button>
+                          </>
+                          : task.userId === userLogged.id ? <button className='btn btn-outline-warning bi bi-eye' onClick={() => handleTaskView(task.id)}></button> : 'No'
+                      }
                     </td>
                   </tr>
                 ))}

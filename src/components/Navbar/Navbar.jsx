@@ -61,11 +61,6 @@ export const Navbar = () => {
         </div>
         <div className={`collapse navbar-collapse ${open ? 'show' : ''}`} id="navbarNav">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link className="nav-link" aria-current="page" to="/">
-                Inicio
-              </Link>
-            </li>
             <li className="nav-item dropdown" ref={dropdownRef}>
               <Link
                 className="nav-link dropdown-toggle"

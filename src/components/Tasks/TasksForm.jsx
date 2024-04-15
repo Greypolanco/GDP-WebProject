@@ -30,17 +30,28 @@ const TasksForm = () => {
 
   const getTask = async () => {
     try {
-      const response = await TaskService.getTask(id)
-      const formattedTask = {
-        ...response,
-        startDate: response.startDate ? new Date(response.startDate).toISOString().split('T')[0] : '',
-        endDate: response.endDate ? new Date(response.endDate).toISOString().split('T')[0] : ''
-      };
-      userLogged.id === response.userId ? setTask(formattedTask) : navigate('/tasks')
+      const response = await TaskService.getTask(id);
+      const projectFound = await ProjectService.getProject(response.projectId);
+      if (projectFound.participants.some(participant => participant.userId === userLogged.id && participant.roleId === 1)) {
+        // Formatear las fechas correctamente
+        const formattedTask = {
+          ...response,
+          startDate: response.startDate ? new Date(response.startDate).toISOString().split('T')[0] : '',
+          endDate: response.endDate ? new Date(response.endDate).toISOString().split('T')[0] : ''
+        };
+        setTask(formattedTask);
+        // Establecer el proyecto seleccionado
+        setProjectSelected(response.projectId);
+        // Llamar al evento handleProjectSelect para cargar los usuarios
+        handleProjectSelect(response.projectId);
+      } else {
+        navigate(`/tasks`);
+      }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
+
 
   const getProjects = async () => {
     try {
@@ -67,8 +78,8 @@ const TasksForm = () => {
       setUsersList(users);
     }
   }
-  
-  
+
+
   const saveTask = async () => {
     try {
       task.title = task.title.toString();
@@ -87,7 +98,7 @@ const TasksForm = () => {
         await TaskService.postTask(task)
       }
       setTask(initialState)
-      navigate('/tasks/consult')
+      navigate(`/projects/${projectSelected}`)
     } catch (error) {
       console.error(error)
     }
@@ -99,7 +110,7 @@ const TasksForm = () => {
   }
 
   useEffect(() => {
-    if (id){
+    if (id) {
       getTask();
       setProjectSelected(task.projectId);
     }
@@ -108,6 +119,12 @@ const TasksForm = () => {
   useEffect(() => {
     getProjects();
   }, [])
+
+  useEffect(() => {
+    if (projectSelected) {
+      handleProjectSelect(projectSelected);
+    }
+  }, [projectSelected])
 
   return (
     <div className='card'>

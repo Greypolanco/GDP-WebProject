@@ -147,3 +147,12 @@ export const PostTask = async (task) => {
   const data = await response.json();
   return data;
 }
+
+export const DeleteTask = async (taskId) => {
+  const response = await fetch(`${API_URL}/Task/${taskId}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const data = await response.json();
+  return data;
+} 
