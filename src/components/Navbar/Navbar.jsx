@@ -47,7 +47,7 @@ export const Navbar = () => {
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
       <div className="container-fluid">
         <Link className="navbar-brand important" to="#">
-          {user ? `${user.name} ${user.surname}` : <img src={logonavbar} alt="logo" width={100}/>}
+          <img src={logonavbar} alt="logo" width={100} />
         </Link>
         <div className="d-flex align-items-center">
           <button
@@ -97,7 +97,8 @@ export const Navbar = () => {
         </div>
       </div>
       <div className="ms-2 me-2">
-        <div className="navbar-nav">
+        <div className="navbar-nav d-flex justify-content-between align-items-center">
+          <div><h5 className="important m-1 me-3">{user && user.username}</h5></div>
           {user ? <LogoutButton /> : <LoginButton />}
         </div>
       </div>
