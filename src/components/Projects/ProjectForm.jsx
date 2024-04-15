@@ -54,6 +54,7 @@ export const ProjectForm = () => {
       project.tasks = [];
       console.log(project);
       const response = await ProjectService.postProject(project, userLogged.id);
+      navigate(`/projects/${response.id}`);
       return response;
     } catch (error) {
       console.error(error);
@@ -92,33 +93,38 @@ export const ProjectForm = () => {
       alert('No puedes eliminar al creador del proyecto');
       return;
     }
-
+  
     const participantToRemove = project.participants.find(participant => participant.userId === userId);
     if (participantToRemove.roleId === 1 && userLogged.id !== project.creatorId) {
       alert('No puedes eliminar a otro administrador del proyecto');
       return;
     }
-
+  
     try {
-      // Remove the participant from the database
       await ProjectService.removeParticipant(project.id, userId);
-
-      // Update local state to reflect the removed participant
-      const updatedParticipants = participants.filter(participant => participant.id !== userId);
+  
+      const updatedParticipants = participants.filter(participant => participant.userId !== userId);
       setParticipants(updatedParticipants);
-
-      // Update project state to reflect the removed participant
+  
       setProject(prevProject => ({
         ...prevProject,
         participants: prevProject.participants.filter(participant => participant.userId !== userId)
       }));
-
+      
+      const user = await getUserById(userId);
+      user.tasks.map(task => task.projectId === project.id ? deleteTask(task.id) : null);
+  
+      // Actualizar la lista de tareas del proyecto
+      const updatedProjectTasks = tasks.filter(task => !user.tasks.some(userTask => userTask.id === task.id));
+      setTasks(updatedProjectTasks);
+  
       alert('Participante eliminado correctamente');
     } catch (error) {
       console.error('Error al eliminar el participante:', error);
       alert('Error al eliminar el participante. Intente nuevamente');
     }
   };
+  
 
 
   const getProject = async () => {
@@ -230,7 +236,7 @@ export const ProjectForm = () => {
         await getProject();
       } else {
         setProject(initialState);
-        setTasks([]); //Limpiar tareas cuando es un nuevo formulario.
+        setTasks([]);
       }
       await getUsersAsync();
     };
